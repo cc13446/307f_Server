@@ -166,7 +166,6 @@ public class MainUI extends JFrame {
 
     }
 
-
     public static void main(String[] args) {
         MainUI a = new MainUI();
         a.setVisible(true);
