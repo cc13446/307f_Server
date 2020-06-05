@@ -5,10 +5,7 @@ import javax.swing.*;
 import org.jdesktop.swingx.JXDatePicker;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,12 +17,20 @@ public class QueryReportUI extends JFrame {
     ArrayList<Integer> roomList = new ArrayList<>();//房间列表
 
     //构造方法
-    public QueryReportUI() {
+    public QueryReportUI(JFrame mainUI) {
         setTitle("请求报表");
         setBounds(610, 140, 420, 580);//设置窗口大小
         setResizable(false);//设置窗口不能改变大小
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);//关闭窗口 dispose这个窗口
         setLayout(null);
+
+        //本窗口关闭后，设置原窗口可选中
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                //设置启用
+                mainUI.setEnabled(true);
+            }
+        });
 
         //房间列表标签
         JLabel roomListLabel = new JLabel("房间列表:", JLabel.CENTER);
@@ -74,6 +79,10 @@ public class QueryReportUI extends JFrame {
                 //如果输入的是数字，且数字长度未超过int限制，且未包含在房间列表中，加入房间列表
                 if (roomTextField.getText().length() < 10 && StringUtils.isNumeric(roomTextField.getText()) && !roomList.contains(Integer.parseInt(roomTextField.getText())))
                     roomList.add(Integer.parseInt(roomTextField.getText()));
+                else if (roomTextField.getText().length() >= 10 || !StringUtils.isNumeric(roomTextField.getText()))
+                    JOptionPane.showMessageDialog(null, "输入的数字不是合法的房间号");
+                else
+                    JOptionPane.showMessageDialog(null, "输入的房间号重复");
 
                 String id = new String();
                 for (int roomID : roomList)
