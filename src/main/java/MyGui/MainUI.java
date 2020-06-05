@@ -9,7 +9,7 @@ public class MainUI extends JFrame {
     public MainUI() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("系统管理主界面");
-        setBounds(610, 140, 800, 600);//设置窗口大小
+        setBounds(610, 140, 600, 400);//设置窗口大小
         setLayout(new BorderLayout());
 //        setLayout(new GridBagLayout());
 
@@ -21,71 +21,73 @@ public class MainUI extends JFrame {
 
         //管理员部分
         //添加标题
-        JLabel administratorLabel = new JLabel("管理员",JLabel.CENTER);
+        JLabel administratorLabel = new JLabel("管理员", JLabel.CENTER);
         administratorLabel.setFont(new Font("楷体", Font.PLAIN, 30));
-        administratorLabel.setForeground(Color.red);
 
         //添加开启按钮
         JButton buttonPowerON = new JButton("PowerON");
         buttonPowerON.setFont(new Font("楷体", Font.PLAIN, 24));
-        buttonPowerON.setForeground(Color.red);
 //        buttonQueryReport.addActionListener();//添加动作监听器
 
         //添加查看房间状态按钮
         JButton buttonCheckRoomState = new JButton("查看房间状态");
         buttonCheckRoomState.setFont(new Font("楷体", Font.PLAIN, 24));
-        buttonCheckRoomState.setForeground(Color.red);
 //        buttonPrintRDR.addActionListener();//添加动作监听器
 
 
         //前台部分
         //添加标题
-        JLabel receptionLabel = new JLabel("前台",JLabel.CENTER);
+        JLabel receptionLabel = new JLabel("前台", JLabel.CENTER);
         receptionLabel.setFont(new Font("楷体", Font.PLAIN, 30));
-        receptionLabel.setForeground(Color.red);
 
         //添加创建账单按钮
         JButton buttonCreateInvoice = new JButton("创建账单");
         buttonCreateInvoice.setFont(new Font("楷体", Font.PLAIN, 24));
-        buttonCreateInvoice.setForeground(Color.red);
 //        buttonCreateRDR.addActionListener();//添加动作监听器
 
         //添加打印账单按钮
         JButton buttonPrintInvoice = new JButton("打印账单");
         buttonPrintInvoice.setFont(new Font("楷体", Font.PLAIN, 24));
-        buttonPrintInvoice.setForeground(Color.red);
 //        buttonPrintRDR.addActionListener();//添加动作监听器
 
         //添加创建详单按钮
         JButton buttonCreateRDR = new JButton("创建详单");
         buttonCreateRDR.setFont(new Font("楷体", Font.PLAIN, 24));
-        buttonCreateRDR.setForeground(Color.red);
 //        buttonCreateRDR.addActionListener();//添加动作监听器
 
         //添加打印详单按钮
         JButton buttonPrintRDR = new JButton("打印详单");
         buttonPrintRDR.setFont(new Font("楷体", Font.PLAIN, 24));
-        buttonPrintRDR.setForeground(Color.red);
 //        buttonPrintRDR.addActionListener();//添加动作监听器
 
 
         //经理部分
         //添加标题
-        JLabel managerLabel = new JLabel("经理",JLabel.CENTER);
+        JLabel managerLabel = new JLabel("经理", JLabel.CENTER);
         managerLabel.setFont(new Font("楷体", Font.PLAIN, 30));
-        managerLabel.setForeground(Color.red);
 
         //添加查看报表按钮
         JButton buttonQueryReport = new JButton("查看报表");
         buttonQueryReport.setFont(new Font("楷体", Font.PLAIN, 24));
-        buttonQueryReport.setForeground(Color.red);
-//        buttonQueryReport.addActionListener();//添加动作监听器
+        buttonQueryReport.addActionListener(new ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+//                mainUI.setEnabled(false);
+                QueryReportUI queryReport = new QueryReportUI();
+                queryReport.setVisible(true);
+            }
+        });//添加动作监听器
 
         //添加打印报表按钮
         JButton buttonPrintReport = new JButton("打印报表");
         buttonPrintReport.setFont(new Font("楷体", Font.PLAIN, 24));
-        buttonPrintReport.setForeground(Color.red);
-//        buttonPrintRDR.addActionListener();//添加动作监听器
+        buttonPrintReport.addActionListener(new ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+//                mainUI.setEnabled(false);
+                PrintReportUI printReport = new PrintReportUI();
+                System.out.println("1");
+                printReport.setVisible(true);
+            }
+        });//添加动作监听器
 
         //设置布局
 
@@ -161,6 +163,7 @@ public class MainUI extends JFrame {
         s.gridwidth = 1;
         s.gridheight = 2;
         centerPane.add(buttonPrintReport, s);
+
     }
 
 
