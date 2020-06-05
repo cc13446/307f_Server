@@ -1,5 +1,7 @@
 package MyGui;
 
+import Domain.PrintReport;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -83,9 +85,11 @@ public class MainUI extends JFrame {
         buttonPrintReport.addActionListener(new ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
 //                mainUI.setEnabled(false);
-                PrintReportUI printReport = new PrintReportUI();
-                System.out.println("1");
-                printReport.setVisible(true);
+                PrintReport printReport = new PrintReport();
+                if (printReport.printReport()) {
+                    JOptionPane.showMessageDialog(null, "报表打印成功");
+                } else
+                    JOptionPane.showMessageDialog(null, "报表打印失败");
             }
         });//添加动作监听器
 
