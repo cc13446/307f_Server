@@ -1,5 +1,7 @@
 package MyGui;
 
+import Domain.PrintReport;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,6 +10,7 @@ import java.awt.event.ActionListener;
 public class MainUI extends JFrame {
     //构造方法
     public MainUI() {
+        JFrame mainUI = this;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("系统管理主界面");
         setBounds(610, 140, 600, 400);//设置窗口大小
@@ -99,8 +102,8 @@ public class MainUI extends JFrame {
         buttonQueryReport.setFont(new Font("楷体", Font.PLAIN, 24));
         buttonQueryReport.addActionListener(new ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
-//                mainUI.setEnabled(false);
-                QueryReportUI queryReport = new QueryReportUI();
+                mainUI.setEnabled(false);//设置本窗口不可选中
+                QueryReportUI queryReport = new QueryReportUI(mainUI);
                 queryReport.setVisible(true);
             }
         });//添加动作监听器
@@ -111,9 +114,11 @@ public class MainUI extends JFrame {
         buttonPrintReport.addActionListener(new ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
 //                mainUI.setEnabled(false);
-                PrintReportUI printReport = new PrintReportUI();
-                System.out.println("1");
-                printReport.setVisible(true);
+                PrintReport printReport = new PrintReport();
+                if (printReport.printReport()) {
+                    JOptionPane.showMessageDialog(null, "报表打印成功");
+                } else
+                    JOptionPane.showMessageDialog(null, "报表打印失败");
             }
         });//添加动作监听器
 
@@ -193,7 +198,6 @@ public class MainUI extends JFrame {
         centerPane.add(buttonPrintReport, s);
 
     }
-
 
     public static void main(String[] args) {
         MainUI a = new MainUI();
