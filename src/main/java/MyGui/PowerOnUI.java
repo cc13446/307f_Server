@@ -18,8 +18,9 @@ public class PowerOnUI extends JFrame {
     private double tempLowLimit;
     private double defaultTargetTemp;
 
-    public PowerOnUI() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public PowerOnUI(JFrame relativeWindow) {
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(relativeWindow);
         setTitle("开机");
         setSize(250, 330);
         setResizable(false);

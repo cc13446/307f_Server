@@ -4,8 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class RoomStateUI extends JFrame {
-    public RoomStateUI() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public RoomStateUI(JFrame relativeWindow) {
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(relativeWindow);
         setTitle("Room State");
         setSize(600, 400);
 
