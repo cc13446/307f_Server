@@ -81,7 +81,7 @@ public class MainUI extends JFrame {
         });
 
         //添加创建详单按钮
-        JButton buttonCreateRDR = new JButton("创建详单");
+        JButton buttonCreateRDR = new JButton("查看详单");
         buttonCreateRDR.setFont(new Font("楷体", Font.PLAIN, 24));
         buttonCreateRDR.addActionListener(new ActionListener() {
 
