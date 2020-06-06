@@ -18,8 +18,9 @@ public class PowerOnUI extends JFrame {
     private double tempLowLimit;
     private double defaultTargetTemp;
 
-    public PowerOnUI() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public PowerOnUI(JFrame relativeWindow) {
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(relativeWindow);
         setTitle("开机");
         setSize(250, 330);
         setResizable(false);
@@ -220,6 +221,9 @@ public class PowerOnUI extends JFrame {
                 String printMsg = "mode:" + mode.toString() + " feeRateHigh:" + feeRateHigh + " feeRateMid:" + feeRateMid + " feeRateLow:" + feeRateLow
                         + " tempHighLimit:" + tempHighLimit + " tempLowLimit:" + tempLowLimit + " defaultTargetTemp:" + defaultTargetTemp;
                 System.out.println("空调初始化参数为：" + printMsg);
+
+                // 发送信息
+                sendPara();
             }
         });
 
@@ -265,5 +269,12 @@ public class PowerOnUI extends JFrame {
 
         setContentPane(jp);
         setLocationRelativeTo(null);
+    }
+
+    // 发送从UI获得的空调初始化参数
+    public void sendPara() {
+
+        System.out.println("空调默认参数已发送");
+        dispose();
     }
 }

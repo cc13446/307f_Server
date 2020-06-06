@@ -31,13 +31,26 @@ public class MainUI extends JFrame {
         //添加开启按钮
         JButton buttonPowerON = new JButton("PowerON");
         buttonPowerON.setFont(new Font("楷体", Font.PLAIN, 24));
-//        buttonQueryReport.addActionListener();//添加动作监听器
+        //添加动作监听器
+        buttonPowerON.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PowerOnUI powerOnWin = new PowerOnUI(mainUI);
+                powerOnWin.setVisible(true);
+            }
+        });
 
         //添加查看房间状态按钮
         JButton buttonCheckRoomState = new JButton("查看房间状态");
         buttonCheckRoomState.setFont(new Font("楷体", Font.PLAIN, 24));
-//        buttonPrintRDR.addActionListener();//添加动作监听器
-
+        //添加动作监听器
+        buttonCheckRoomState.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                RoomStateUI roomStateWin = new RoomStateUI(mainUI);
+                roomStateWin.setVisible(true);
+            }
+        });
 
         //前台部分
         //添加标题
@@ -68,7 +81,7 @@ public class MainUI extends JFrame {
         });
 
         //添加创建详单按钮
-        JButton buttonCreateRDR = new JButton("创建详单");
+        JButton buttonCreateRDR = new JButton("查看详单");
         buttonCreateRDR.setFont(new Font("楷体", Font.PLAIN, 24));
         buttonCreateRDR.addActionListener(new ActionListener() {
 
