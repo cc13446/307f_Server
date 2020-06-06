@@ -53,17 +53,6 @@ public class QueryReportUI extends JFrame {
         scrollRoom.setBounds(5, 210, 320, 35);
         add(scrollRoom);
 
-//        //输出框
-//        JTextArea resultTextArea = new JTextArea();
-//        resultTextArea.setEditable(false);
-//        //设置滚动条
-//        JScrollPane scroll = new JScrollPane(resultTextArea);
-//        //分别设置水平和垂直滚动条自动出现
-//        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-//        scroll.setBounds(5, 285, 400, 255);
-//        add(scroll);
-
         //房间号标签
         JLabel roomID = new JLabel("输入房间号:", JLabel.CENTER);
         roomID.setBounds(8, 5, 80, 25);
@@ -102,6 +91,7 @@ public class QueryReportUI extends JFrame {
                     }
                 });
 
+                //编辑框显示房间号序列
                 String id = new String();
                 for (int roomID : roomList)
                     id += String.valueOf(roomID) + "  ";
@@ -135,7 +125,7 @@ public class QueryReportUI extends JFrame {
         typeReportJBox.setBounds(110, 120, 200, 25);
         add(typeReportJBox);
 
-        //添加按钮
+        //添加清空房间列表按钮
         JButton clearRoomListButton = new JButton();
         clearRoomListButton.setText("清空房间列表");
         clearRoomListButton.setBounds(40, 260, 120, 25);
@@ -148,7 +138,7 @@ public class QueryReportUI extends JFrame {
         });//添加监听器
         add(clearRoomListButton);
 
-        //添加按钮
+        //添加查询报表按钮
         JButton queryButton = new JButton();
         queryButton.setText("查询报表");
         queryButton.setBounds(190, 260, 120, 25);
@@ -174,6 +164,8 @@ public class QueryReportUI extends JFrame {
                 //发送网络请求**********************************************************************************
                 ArrayList<ReportForm> reportFormList = new ArrayList<>();
                 reportFormList = test(roomList, typeReport, date);
+
+                //跳转界面
                 queryReportUI.setEnabled(false);//设置本窗口不可选中
                 ViewReportUI viewReportUI = new ViewReportUI(queryReportUI,reportFormList);
                 viewReportUI.setVisible(true);

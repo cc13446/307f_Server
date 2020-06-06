@@ -61,6 +61,7 @@ public class ViewReportUI extends JFrame {
 
         //初始化JTable
         jt = new JTable(rowData, columnName);
+        jt.setEnabled(false);
         jsp = new JScrollPane(jt);
         add(jsp);
     }
