@@ -221,6 +221,9 @@ public class PowerOnUI extends JFrame {
                 String printMsg = "mode:" + mode.toString() + " feeRateHigh:" + feeRateHigh + " feeRateMid:" + feeRateMid + " feeRateLow:" + feeRateLow
                         + " tempHighLimit:" + tempHighLimit + " tempLowLimit:" + tempLowLimit + " defaultTargetTemp:" + defaultTargetTemp;
                 System.out.println("空调初始化参数为：" + printMsg);
+
+                // 发送信息
+                sendPara();
             }
         });
 
@@ -266,5 +269,12 @@ public class PowerOnUI extends JFrame {
 
         setContentPane(jp);
         setLocationRelativeTo(null);
+    }
+
+    // 发送从UI获得的空调初始化参数
+    public void sendPara() {
+
+        System.out.println("空调默认参数已发送");
+        dispose();
     }
 }
