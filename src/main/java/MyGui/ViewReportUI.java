@@ -1,12 +1,8 @@
 package MyGui;
 
-import Domain.Report;
 import Domain.ReportForm;
-import jxl.write.Label;
 
 import javax.swing.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -17,7 +13,7 @@ public class ViewReportUI extends JFrame {
     private JTable jt = null;
     private JScrollPane jsp = null;
 
-    public ViewReportUI(JFrame queryReportUI, ArrayList<ReportForm> reportFormList){
+    public ViewReportUI(ArrayList<ReportForm> reportFormList){
         setTitle("报表");
         setSize(800, 300);
         setLocation(610, 200);
@@ -25,22 +21,22 @@ public class ViewReportUI extends JFrame {
         setResizable(false);
         setVisible(false);
 
-        //本窗口关闭后，设置原窗口可选中
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                //设置启用
-                queryReportUI.setEnabled(true);
-            }
-        });
+//        //本窗口关闭后，设置原窗口可选中
+//        addWindowListener(new WindowAdapter() {
+//            public void windowClosing(WindowEvent e) {
+//                //设置启用
+//                queryReportUI.setEnabled(true);
+//            }
+//        });
 
         columnName = new Vector();
         //设置列名
         columnName.add("房间号");
-        columnName.add("房间开关次数");
-        columnName.add("空调使用时长");
+        columnName.add("空调开关次数");
+        columnName.add("空调服务时长");
         columnName.add("总费用");
         columnName.add("被调度的次数");
-        columnName.add("详单数");
+        columnName.add("旅客人数");
         columnName.add("调温次数");
         columnName.add("调风次数");
 
@@ -53,7 +49,7 @@ public class ViewReportUI extends JFrame {
             line.add(reportForm.getStringUseTime());
             line.add(reportForm.getTotalFee());
             line.add(reportForm.getSchedulerTimes());
-            line.add(reportForm.getDetailBillNumber());
+            line.add(reportForm.getCustomerNumber());
             line.add(reportForm.getChangeTempTimes());
             line.add(reportForm.getChangeFanSpeedTimes());
             rowData.add(line);

@@ -1,22 +1,32 @@
 package Domain;
 
 public class ReportForm {
-    private int turnTimes;//每个房间的开关次数
-    private long useTime;//使用空调的时长
+    private int turnTimes;//空调开关次数
+    private long useTime;//空调服务时长
     private double totalFee;//总费用
     private int schedulerTimes;//被调度的次数
-    private int detailBillNumber;//详单数
+    private int customerNumber;//旅客人数
     private int changeTempTimes;//调温次数
     private int changeFanSpeedTimes;//调风次数
     private int roomId;//房间号
 
+    public ReportForm(int turnTimes, long useTime, double totalFee, int schedulerTimes, int customerNumber, int changeTempTimes, int changeFanSpeedTimes, int roomId) {
+        this.turnTimes = turnTimes;
+        this.useTime = useTime;
+        this.totalFee = totalFee;
+        this.schedulerTimes = schedulerTimes;
+        this.customerNumber = customerNumber;
+        this.changeTempTimes = changeTempTimes;
+        this.changeFanSpeedTimes = changeFanSpeedTimes;
+        this.roomId = roomId;
+    }
 
     //构造方法
     public ReportForm() {
         turnTimes = 0;
         totalFee = 0;
         schedulerTimes = 0;
-        detailBillNumber = 0;
+        customerNumber = 0;
         changeTempTimes = 0;
         changeFanSpeedTimes = 0;
         roomId = 0;
@@ -60,12 +70,12 @@ public class ReportForm {
         this.schedulerTimes = schedulerTimes;
     }
 
-    public int getDetailBillNumber() {
-        return detailBillNumber;
+    public int getCustomerNumber() {
+        return customerNumber;
     }
 
-    public void setDetailBillNumber(int detailBillNumber) {
-        this.detailBillNumber = detailBillNumber;
+    public void setCustomerNumber(int customerNumber) {
+        this.customerNumber = customerNumber;
     }
 
     public int getChangeTempTimes() {
@@ -99,7 +109,7 @@ public class ReportForm {
                 ", useTime=" + useTime / 1000 / 3600 + "时" + useTime / 1000 / 60 % 60 + "分" + useTime / 1000 % 60 + "秒" +
                 ", totalFee=" + totalFee +
                 ", schedulerTimes=" + schedulerTimes +
-                ", detailBillNumber=" + detailBillNumber +
+                ", detailBillNumber=" + customerNumber +
                 ", changeTempTimes=" + changeTempTimes +
                 ", changeFanSpeedTimes=" + changeFanSpeedTimes +
                 '.';
