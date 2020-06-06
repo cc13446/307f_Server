@@ -2,6 +2,7 @@ package MyGui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainUI extends JFrame {
@@ -43,22 +44,49 @@ public class MainUI extends JFrame {
         //添加创建账单按钮
         JButton buttonCreateInvoice = new JButton("创建账单");
         buttonCreateInvoice.setFont(new Font("楷体", Font.PLAIN, 24));
-//        buttonCreateRDR.addActionListener();//添加动作监听器
+        //buttonCreateRDR.addActionListener();//添加动作监听器
+        buttonCreateInvoice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CreateInvoiceUI createInvoiceGUI=new CreateInvoiceUI();
+                createInvoiceGUI.setVisible(true);
+            }
+        });
 
         //添加打印账单按钮
         JButton buttonPrintInvoice = new JButton("打印账单");
         buttonPrintInvoice.setFont(new Font("楷体", Font.PLAIN, 24));
-//        buttonPrintRDR.addActionListener();//添加动作监听器
+        buttonPrintInvoice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PrintInvoiceUI printInvoiceUI=new PrintInvoiceUI();
+                printInvoiceUI.setVisible(true);
+            }
+        });
 
         //添加创建详单按钮
         JButton buttonCreateRDR = new JButton("创建详单");
         buttonCreateRDR.setFont(new Font("楷体", Font.PLAIN, 24));
+        buttonCreateRDR.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CreateDetailBillUI createDetailBillGUI=new CreateDetailBillUI();
+                createDetailBillGUI.setVisible(true);
+                //System.out.println("t");
+            }
+        });
 //        buttonCreateRDR.addActionListener();//添加动作监听器
 
         //添加打印详单按钮
         JButton buttonPrintRDR = new JButton("打印详单");
         buttonPrintRDR.setFont(new Font("楷体", Font.PLAIN, 24));
-//        buttonPrintRDR.addActionListener();//添加动作监听器
+        buttonPrintRDR.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PrintInvoiceUI printInvoiceUI=new PrintInvoiceUI();
+                printInvoiceUI.setVisible(true);
+            }
+        });
 
 
         //经理部分
