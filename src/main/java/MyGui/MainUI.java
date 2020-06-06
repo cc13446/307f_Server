@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 public class MainUI extends JFrame {
     //构造方法
     public MainUI() {
-        JFrame mainUI = this;
+        final JFrame mainUI = this;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("系统管理主界面");
         setBounds(610, 140, 600, 400);//设置窗口大小
@@ -60,22 +60,49 @@ public class MainUI extends JFrame {
         //添加创建账单按钮
         JButton buttonCreateInvoice = new JButton("创建账单");
         buttonCreateInvoice.setFont(new Font("楷体", Font.PLAIN, 24));
-//        buttonCreateRDR.addActionListener();//添加动作监听器
+        //buttonCreateRDR.addActionListener();//添加动作监听器
+        buttonCreateInvoice.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                CreateInvoiceUI createInvoiceGUI=new CreateInvoiceUI();
+                createInvoiceGUI.setVisible(true);
+            }
+        });
 
         //添加打印账单按钮
         JButton buttonPrintInvoice = new JButton("打印账单");
         buttonPrintInvoice.setFont(new Font("楷体", Font.PLAIN, 24));
-//        buttonPrintRDR.addActionListener();//添加动作监听器
+        buttonPrintInvoice.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                PrintInvoiceUI printInvoiceUI=new PrintInvoiceUI();
+                printInvoiceUI.setVisible(true);
+            }
+        });
 
         //添加创建详单按钮
         JButton buttonCreateRDR = new JButton("创建详单");
         buttonCreateRDR.setFont(new Font("楷体", Font.PLAIN, 24));
+        buttonCreateRDR.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                CreateDetailBillUI createDetailBillGUI=new CreateDetailBillUI();
+                createDetailBillGUI.setVisible(true);
+                //System.out.println("t");
+            }
+        });
 //        buttonCreateRDR.addActionListener();//添加动作监听器
 
         //添加打印详单按钮
         JButton buttonPrintRDR = new JButton("打印详单");
         buttonPrintRDR.setFont(new Font("楷体", Font.PLAIN, 24));
-//        buttonPrintRDR.addActionListener();//添加动作监听器
+        buttonPrintRDR.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                PrintInvoiceUI printInvoiceUI=new PrintInvoiceUI();
+                printInvoiceUI.setVisible(true);
+            }
+        });
 
 
         //经理部分
