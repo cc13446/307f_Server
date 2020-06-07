@@ -20,7 +20,7 @@ public class PrintReport {
     public boolean printReport() {
         try {
             //打开文件
-            WritableWorkbook book = Workbook.createWorkbook(new File("ReportForm" + new SimpleDateFormat(" yyyyMMdd-HHmmss").format(new Date()) + ".xls"));
+            WritableWorkbook book = Workbook.createWorkbook(new File("报表" + new SimpleDateFormat(" yyyy年MM月dd日 HH时mm分ss秒").format(new Date()) + ".xls"));
             //生成名为“第一页”的工作表，参数0表示这是第一页
             WritableSheet sheet = book.createSheet("报表", 0);
 
@@ -38,7 +38,7 @@ public class PrintReport {
             sheet.addCell(label);//将定义好的单元格添加到工作表中
 
             //写入报表日期
-            sheet.addCell(new Label(0, 1, new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss").format(report.getDate())));
+            sheet.addCell(new Label(0, 1, new SimpleDateFormat(" yyyy-MM-dd").format(report.getDate())));
 
             sheet.addCell(new Label(0, 2, "房间号"));
             sheet.addCell(new Label(1, 2, "空调开关次数"));

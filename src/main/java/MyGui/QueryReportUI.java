@@ -14,6 +14,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyVetoException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -90,10 +91,9 @@ public class QueryReportUI extends JFrame {
                 Collections.sort(roomList, new Comparator<Integer>() {
                     @Override
                     public int compare(Integer o1, Integer o2) {
-                        if((int)o1 > (int)o2) {
+                        if ((int) o1 > (int) o2) {
                             return 1;
-                        }
-                        else {
+                        } else {
                             return -1;
                         }
                     }
@@ -156,48 +156,51 @@ public class QueryReportUI extends JFrame {
                 Date date = new Date();//返回的是某日0点的时间
                 date.setTime(datePick.getDate().getTime() + 24 * 3600 * 1000 - 1);//把它变成某日的23:59:59
 
-                System.out.println(datePick.getDate());
-                System.out.println(date);
+//                System.out.println(datePick.getDate());
+//                System.out.println(date);
 
-                /********************发送网络请求****************************/
-                HttpRequestModel httpRequestModel = new HttpRequestModel();
-                JSONObject json = new JSONObject();
+                if (roomList.size() == 0)
+                    JOptionPane.showMessageDialog(null, "无可查询的房间号");
+                else {
+                    /********************发送网络请求****************************/
+                    HttpRequestModel httpRequestModel = new HttpRequestModel();
+                    JSONObject json = new JSONObject();
 
-                //写json包
-                json.put("msgType", 4);
-                json.put("reportDate", new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss").format(date));
-                json.put("reportType", typeReportJBox.getSelectedIndex());
-                JSONArray room = new JSONArray();
-                for (int roomID:roomList){
-                    JSONObject roomJson = new JSONObject();
-                    roomJson.put("roomId",roomID);
-                    room.add(roomJson);
+                    //写json包
+                    json.put("msgType", 4);
+                    json.put("reportDate", new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss ").format(date));
+                    json.put("reportType", typeReportJBox.getSelectedIndex());
+                    JSONArray room = new JSONArray();
+                    for (int roomID : roomList) {
+                        JSONObject roomJson = new JSONObject();
+                        roomJson.put("roomId", roomID);
+                        room.add(roomJson);
+                    }
+                    json.put("roomList", room);
+
+                    //发送请求
+                    JSONArray temp = null;
+                    try {
+                        temp = httpRequestModel.send1(json);
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    } catch (InterruptedException interruptedException) {
+                        interruptedException.printStackTrace();
+                    }
+                    if (temp != null) {
+                        report = getReportFromJson(temp, date, typeReportJBox.getSelectedIndex());
+                        ArrayList<ReportForm> reportFormList = new ArrayList<>();
+                        reportFormList = report.getReportFormList();
+                        //跳转界面
+                        ViewReportUI viewReportUI = new ViewReportUI(reportFormList);
+                        viewReportUI.setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "发送请求失败");
+                    }
+
+
                 }
-                json.put("roomList",room);
 
-                //发送请求
-                JSONObject temp = null;
-                try {
-                    temp = httpRequestModel.send(json);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                } catch (InterruptedException interruptedException) {
-                    interruptedException.printStackTrace();
-                }
-                if(temp != null){
-                    System.out.println(temp);
-                    report = getReportFromJson(temp);
-                }
-                else{
-                    System.out.println("发送失败");
-                }
-
-                ArrayList<ReportForm> reportFormList = new ArrayList<>();
-
-                //跳转界面
-//                queryReportUI.setEnabled(false);//设置本窗口不可选中
-                ViewReportUI viewReportUI = new ViewReportUI(reportFormList);
-                viewReportUI.setVisible(true);
 
             }
         });//添加监听器
@@ -233,10 +236,9 @@ public class QueryReportUI extends JFrame {
 //        return list;
 //    }
 
-    public Report getReportFromJson(JSONObject temp) {
+    public Report getReportFromJson(JSONArray list, Date date, int reportType) {
         Report report1 = new Report();
         TypeReport typeReport = TypeReport.DAILY;//报表类型
-        int reportType = temp.getInt("reportType");
         if (reportType == 0)
             typeReport = TypeReport.DAILY;
         if (reportType == 1)
@@ -247,25 +249,23 @@ public class QueryReportUI extends JFrame {
             typeReport = TypeReport.ANNUAL;
         report1.setTypeReport(typeReport);
 
-        try {
-            report1.setDate(new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss").parse(temp.getString("date")));
-        } catch (ParseException parseException) {
-            parseException.printStackTrace();
-        }
+        report1.setDate(date);
 
-        JSONArray list =  temp.getJSONArray("reportFormList");
-        for (Object o:list){
+
+//        System.out.println(list);
+        for (Object o : list) {
             JSONObject json = (JSONObject) o;
             ReportForm reportForm = new ReportForm(json.getInt("turnTimes"),
                     json.getLong("useTime"),
                     json.getDouble("totalFee"),
                     json.getInt("schedulerTimes"),
-                    json.getInt("customerNumber"),
+                    json.getInt("customNumber"),
                     json.getInt("changeTempTimes"),
                     json.getInt("changeFanSpeedTimes"),
                     json.getInt("roomId"));
             report1.addReportForm(reportForm);
         }
+//        System.out.println(report1.toString());
         return report1;
     }
 }
