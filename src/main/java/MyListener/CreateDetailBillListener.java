@@ -1,6 +1,7 @@
 package MyListener;
 
 import Domain.DetailBill;
+import MyHttp.HttpRequestModel;
 import net.sf.json.JSONObject;
 
 import javax.swing.*;
@@ -21,7 +22,7 @@ public class CreateDetailBillListener implements ActionListener {
         this.jFrame=jFrame;
         this.queryButton=queryButton;
         this.roomTextField=roomTextField;
-        queryHttpRequestModel=new HttpRequestModel("/detail/create","POST");
+        //queryHttpRequestModel=new HttpRequestModel("/detail/create","POST");
 
     }
 
@@ -34,14 +35,10 @@ public class CreateDetailBillListener implements ActionListener {
                 JSONObject jsonObject=new JSONObject();
                 jsonObject.put("roomId",roomId);
                 jsonObject.put("msgType",3);
-                jsonObject=queryHttpRequestModel.send(jsonObject,"?roomId="+roomId);
+                //jsonObject=queryHttpRequestModel.send(jsonObject,"?roomId="+String.valueOf(roomId));
             }
         }catch (NullPointerException ignored){
             JOptionPane.showMessageDialog(jFrame, "输入有误", "警告", JOptionPane.ERROR_MESSAGE);
-        } catch (InterruptedException interruptedException) {
-            interruptedException.printStackTrace();
-        } catch (IOException ioException) {
-            ioException.printStackTrace();
         }
     }
 }

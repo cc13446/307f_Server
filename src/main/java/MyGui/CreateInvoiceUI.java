@@ -1,13 +1,24 @@
 package MyGui;
 
+import App.PrintInvoice;
+import Domain.Invoice;
+import MyHttp.HttpRequestModel;
+import net.sf.json.JSONObject;
 import org.jdesktop.swingx.JXDatePicker;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CreateInvoiceUI extends JFrame{
+
+    private int customId;
+    private Invoice invoice;
+
     public CreateInvoiceUI(){
         setTitle("查看账单");
         setBounds(610, 140, 370, 320);//设置窗口大小
@@ -25,27 +36,7 @@ public class CreateInvoiceUI extends JFrame{
         JTextField roomTextField = new JTextField();
         roomTextField.setBounds(150,5,80,30);
         add(roomTextField);
-//          //入住日期
-//        JLabel reportDateIn = new JLabel("入住日期:",JLabel.CENTER);
-//        reportDateIn.setBounds(0,60,80,40);
-//        add(reportDateIn);
-//
-//        //date选择器
-//        final JXDatePicker dateInPick = new JXDatePicker();
-//        dateInPick.setDate(new Date());// 设置 date日期
-//        dateInPick.setBounds(150,60,200,40);
-//        add(dateInPick);
-//
-//        //退房日期
-//        JLabel reportDateOut = new JLabel("退房日期:",JLabel.CENTER);
-//        reportDateOut.setBounds(0,120,80,40);
-//        add(reportDateOut);
-//
-//        //date选择器
-//        final JXDatePicker dateOutPick = new JXDatePicker();
-//        dateOutPick.setDate(new Date());// 设置 date日期
-//        dateOutPick.setBounds(150,120,200,40);
-//        add(dateOutPick);
+
 
         JLabel invoiceText = new JLabel("共需交费￥:",JLabel.CENTER);
         invoiceText.setBounds(8,60,80,40);
@@ -57,6 +48,30 @@ public class CreateInvoiceUI extends JFrame{
         fee.setBounds(150,60,200,40);
         add(fee);
 
+
+        /***
+         * ### to
+         *
+         * ```json
+         * {
+         *     "msgType":  2,
+         *     "roomId": 1
+         * }
+         * ```
+         *
+         * ### from
+         *
+         * ```json
+         * {
+         *     "customId":10,
+         *      "totalFee" : 20.0,
+         *     "requestOnDate": 2020-10-20 00:00:00,
+         *      "requestOffDate": 2020-10-20 00:00:00
+         * }
+         */
+
+
+
         //添加按钮
         JButton queryButton = new JButton();
         queryButton.setText("查看总费用");
@@ -65,6 +80,26 @@ public class CreateInvoiceUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //查总费用
+                invoice=new Invoice();
+                customId=Integer.parseInt(roomTextField.getText());
+
+                HttpRequestModel httpRequestModel = new HttpRequestModel();
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("customId",customId);
+                jsonObject.put("msgType",2);
+
+
+                JSONObject msg=new JSONObject();
+                invoice.setCustomId(msg.getInt("customId"));
+                try {
+                    invoice.setRequestOnDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(msg.getString("requestOnDate")));
+                    invoice.setRequestOffDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(msg.getString("requestOffDate")));
+                } catch (ParseException parseException) {
+                    parseException.printStackTrace();
+                }
+                invoice.setTotalFee(msg.getDouble("totalFee"));
+                invoiceText.setText(String.valueOf(invoice.getTotalFee()));
+
             }
         });
         add(queryButton);
@@ -77,7 +112,14 @@ public class CreateInvoiceUI extends JFrame{
         printButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //查总费用
+                //print
+                PrintInvoice print=new PrintInvoice(customId,invoice);
+                try {
+                    print.printInvoice();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+
             }
         });
         add(printButton);

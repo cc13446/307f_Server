@@ -1,11 +1,21 @@
 package MyGui;
 
+import App.PrintDetailBill;
+import App.PrintInvoice;
 import Domain.DetailBill;
+import Domain.DetailBillItem;
+import MyHttp.HttpRequestModel;
 import MyListener.CreateDetailBillListener;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.jdesktop.swingx.JXDatePicker;
 
 import javax.swing.*;
-import java.util.Date;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 import org.jdesktop.swingx.JXDatePicker;
 
 import java.awt.*;
@@ -14,7 +24,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Date;
-import java.util.Vector;
+import java.util.List;
+import java.util.logging.SimpleFormatter;
+import Enum.Mode;
+import Enum.FanSpeed;
 
 
 public class CreateDetailBillUI extends JFrame{
@@ -29,6 +42,7 @@ public class CreateDetailBillUI extends JFrame{
     private JTextField roomTextField;
     private CreateDetailBillListener createDetailBillListener;
     private DetailBill detailBill;
+    private int customId;
 
     public CreateDetailBillUI() {
         setTitle("创建详单");
@@ -49,31 +63,6 @@ public class CreateDetailBillUI extends JFrame{
         add(roomTextField);
 
 
-//        //报表日期标签
-//        JLabel reportDateIn = new JLabel("入住日期:",JLabel.CENTER);
-//        reportDateIn.setBounds(0,60,80,40);
-//        add(reportDateIn);
-//
-//        //date选择器
-//        final JXDatePicker dateInPick = new JXDatePicker();
-//        dateInPick.setDate(new Date());// 设置 date日期
-//        dateInPick.setBounds(195,60,200,40);
-//        add(dateInPick);
-//
-//        JLabel reportDateOut = new JLabel("退房日期:",JLabel.CENTER);
-//        reportDateOut.setBounds(0,120,80,40);
-//        add(reportDateOut);
-//
-//        //date选择器
-//        final JXDatePicker dateOutPick = new JXDatePicker();
-//        dateOutPick.setDate(new Date());// 设置 date日期
-//        dateOutPick.setBounds(195,120,200,40);
-//        add(dateOutPick);
-
-
-        //添加按钮
-
-
 
         columnName = new Vector();
         //设置列名
@@ -87,14 +76,14 @@ public class CreateDetailBillUI extends JFrame{
         columnName.add("费率");
         columnName.add("费用");
 
-        rowData = new Vector();
-
-
-        //初始化JTable
-        jt = new JTable(rowData, columnName);
-        jsp = new JScrollPane(jt);
-        jsp.setBounds(5,105,440,255);
-        add(jsp);
+//        rowData = new Vector();
+//
+//
+//        //初始化JTable
+//        jt = new JTable(rowData, columnName);
+//        jsp = new JScrollPane(jt);
+//        jsp.setBounds(5,105,440,255);
+//        add(jsp);
 
 
 
@@ -114,12 +103,144 @@ public class CreateDetailBillUI extends JFrame{
 //        detailBill.setDateIn(dateInPick.getDate());
 //        detailBill.setDateOut(dateOutPick.getDate());
 //        detailBill.setRoomId(Integer.parseInt(roomTextField.getText()));
+
+
+                roomId=Integer.parseInt(roomTextField.getText());
+                HttpRequestModel httpRequestModel = new HttpRequestModel();
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("roomId",roomId);
+                jsonObject.put("msgType",3);
+
+                JSONArray items=new JSONArray();
+                JSONObject msg=new JSONObject();
+
+                try {
+                    msg=httpRequestModel.send(jsonObject);
+
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+
+
+                /**
+                 * {
+                 *     "customId":10,
+                 *     "requestOnDate": 2020-10-20 00:00:00,
+                 *     "requestOffDate": 2020-10-20 00:00:00，
+                 *     "data":
+                 *     [
+                 *     {
+                 *     "startTime":2020-10-20 00:00:00,
+                 *     "endTime":2020-10-20 00:00:00,
+                 *     "mode":0,//1,2 制热制冷送风
+                 *     "fanSpeed":0,//12
+                 *     "targetTemp":26.0,
+                 *     "fee":26.0,
+                 *     "feeRate":0.667,
+                 *     "duration":10000000
+                 * }
+                 * ...
+                 * ]
+                 * }
+                 * ```
+                 */
+
+                DetailBill detailBill1=new DetailBill();
+                ArrayList<DetailBillItem> detailBillItems=new ArrayList<>();
+                customId=msg.getInt("customId");
+                detailBill.setCustomId(customId);
+                //report1.setDate(new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss").parse(temp.getString("date")));
+                try {
+                    detailBill.setRequestOnDate(new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss").parse(msg.getString("requestOnDate")));
+                    detailBill.setRequestOffDate(new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss").parse(msg.getString("requestOffDate")));
+
+                } catch (ParseException parseException) {
+                    parseException.printStackTrace();
+                }
+                JSONArray data=new JSONArray();
+                data=msg.getJSONArray("data");
+                //DetailBillItem item=new DetailBillItem();
+                for (Object object:data){
+                    JSONObject dataJson=(JSONObject)object;
+                    DetailBillItem item=new DetailBillItem();
+                    try {
+                        item.setStartTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dataJson.getString("startTime")));
+                        item.setEndTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dataJson.getString("endTime")));
+
+                    } catch (ParseException parseException) {
+                        parseException.printStackTrace();
+                    }
+                    //mode
+                    if (dataJson.getInt("mode")==0){
+                        item.setMode(Mode.HOT);
+                    }
+                    else if (dataJson.getInt("mode")==1){
+                        item.setMode(Mode.COLD);
+                    }
+                    else if (dataJson.getInt("mode")==2){
+                        item.setMode(Mode.FAN);
+                    }
+                    //fanspeed
+                    int fan=dataJson.getInt("fanSpeed");
+                    if (fan==0)
+                        item.setFanSpeed(FanSpeed.LOW);
+                    else if (fan==1)
+                        item.setFanSpeed(FanSpeed.MEDIUM);
+                    else if (fan==2)
+                        item.setFanSpeed(FanSpeed.HIGH);
+
+                    //targetTemp
+                    item.setTargetTemp(dataJson.getDouble("targetTemp"));
+                    item.setDuration(dataJson.getLong("duration"));
+                    item.setFeeRate(dataJson.getDouble("feeRate"));
+                    item.setFee(dataJson.getDouble("fee"));
+                    detailBillItems.add(item);
+
+
+
+                }
+                detailBill.setDetailBillList(detailBillItems);
+
+                rowData = new Vector();
+
+                for (DetailBillItem item:detailBill.getDetailBillList()){
+                    Vector row = new Vector();
+                    row.add(item.getStartTime());
+                    row.add(item.getEndTime());
+                    row.add(item.getMode());
+                    row.add(item.getFanSpeed());
+                    row.add(item.getTargetTemp());
+                    row.add(item.getFeeRate());
+                    row.add(item.getFee());
+                    rowData.add(row);
+                }
+
+
             }
         });
+
+        jt = new JTable(rowData, columnName);
+        jsp = new JScrollPane(jt);
+        jsp.setBounds(5,105,440,255);
+        add(jsp);
 
         printButton=new JButton();
         printButton.setText("打印详单");
         printButton.setBounds(270,60,100,30);
+        printButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //prinrt
+                try {
+                    PrintDetailBill print=new PrintDetailBill(customId,detailBill);
+                    print.printDetailBill();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
         add(printButton);
 
 
