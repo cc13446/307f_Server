@@ -2,13 +2,20 @@ package MyGui;
 
 import javax.swing.*;
 
+import Domain.PrintReport;
 import Domain.Report;
 import Domain.ReportForm;
+import MyHttp.HttpRequestModel;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.jdesktop.swingx.JXDatePicker;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyVetoException;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -19,9 +26,10 @@ import org.apache.commons.lang.StringUtils;
 
 public class QueryReportUI extends JFrame {
     ArrayList<Integer> roomList = new ArrayList<>();//房间列表
+    Report report = null;//请求得到的报表
 
     //构造方法
-    public QueryReportUI(JFrame mainUI) {
+    public QueryReportUI() {
         JFrame queryReportUI = this;
         setTitle("请求报表");
         setBounds(610, 140, 350, 340);//设置窗口大小
@@ -29,13 +37,13 @@ public class QueryReportUI extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);//关闭窗口 dispose这个窗口
         setLayout(null);
 
-        //本窗口关闭后，设置原窗口可选中
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                //设置启用
-                mainUI.setEnabled(true);
-            }
-        });
+//        //本窗口关闭后，设置原窗口可选中
+//        addWindowListener(new WindowAdapter() {
+//            public void windowClosing(WindowEvent e) {
+//                //设置启用
+//                mainUI.setEnabled(true);
+//            }
+//        });
 
         //房间列表标签
         JLabel roomListLabel = new JLabel("房间列表:", JLabel.CENTER);
@@ -52,17 +60,6 @@ public class QueryReportUI extends JFrame {
         scrollRoom.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollRoom.setBounds(5, 210, 320, 35);
         add(scrollRoom);
-
-//        //输出框
-//        JTextArea resultTextArea = new JTextArea();
-//        resultTextArea.setEditable(false);
-//        //设置滚动条
-//        JScrollPane scroll = new JScrollPane(resultTextArea);
-//        //分别设置水平和垂直滚动条自动出现
-//        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-//        scroll.setBounds(5, 285, 400, 255);
-//        add(scroll);
 
         //房间号标签
         JLabel roomID = new JLabel("输入房间号:", JLabel.CENTER);
@@ -102,6 +99,7 @@ public class QueryReportUI extends JFrame {
                     }
                 });
 
+                //编辑框显示房间号序列
                 String id = new String();
                 for (int roomID : roomList)
                     id += String.valueOf(roomID) + "  ";
@@ -135,10 +133,10 @@ public class QueryReportUI extends JFrame {
         typeReportJBox.setBounds(110, 120, 200, 25);
         add(typeReportJBox);
 
-        //添加按钮
+        //添加清空房间列表按钮
         JButton clearRoomListButton = new JButton();
-        clearRoomListButton.setText("清空房间列表");
-        clearRoomListButton.setBounds(40, 260, 120, 25);
+        clearRoomListButton.setText("清空列表");
+        clearRoomListButton.setBounds(8, 260, 100, 25);
         clearRoomListButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -148,10 +146,10 @@ public class QueryReportUI extends JFrame {
         });//添加监听器
         add(clearRoomListButton);
 
-        //添加按钮
+        //添加查询报表按钮
         JButton queryButton = new JButton();
         queryButton.setText("查询报表");
-        queryButton.setBounds(190, 260, 120, 25);
+        queryButton.setBounds(118, 260, 100, 25);
         queryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -161,37 +159,113 @@ public class QueryReportUI extends JFrame {
                 System.out.println(datePick.getDate());
                 System.out.println(date);
 
-                TypeReport typeReport = TypeReport.DAILY;//报表类型
-                if (typeReportJBox.getSelectedIndex() == 0)
-                    typeReport = TypeReport.DAILY;
-                if (typeReportJBox.getSelectedIndex() == 1)
-                    typeReport = TypeReport.WEEKLY;
-                if (typeReportJBox.getSelectedIndex() == 2)
-                    typeReport = TypeReport.MONTHLY;
-                if (typeReportJBox.getSelectedIndex() == 3)
-                    typeReport = TypeReport.ANNUAL;
+                /********************发送网络请求****************************/
+                HttpRequestModel httpRequestModel = new HttpRequestModel();
+                JSONObject json = new JSONObject();
 
-                //发送网络请求**********************************************************************************
+                //写json包
+                json.put("msgType", 4);
+                json.put("reportDate", new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss").format(date));
+                json.put("reportType", typeReportJBox.getSelectedIndex());
+                JSONArray room = new JSONArray();
+                for (int roomID:roomList){
+                    JSONObject roomJson = new JSONObject();
+                    roomJson.put("roomId",roomID);
+                    room.add(roomJson);
+                }
+                json.put("roomList",room);
+
+                //发送请求
+                JSONObject temp = null;
+                try {
+                    temp = httpRequestModel.send(json);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+                if(temp != null){
+                    System.out.println(temp);
+                    report = getReportFromJson(temp);
+                }
+                else{
+                    System.out.println("发送失败");
+                }
+
                 ArrayList<ReportForm> reportFormList = new ArrayList<>();
-                reportFormList = test(roomList, typeReport, date);
-                queryReportUI.setEnabled(false);//设置本窗口不可选中
-                ViewReportUI viewReportUI = new ViewReportUI(queryReportUI,reportFormList);
+
+                //跳转界面
+//                queryReportUI.setEnabled(false);//设置本窗口不可选中
+                ViewReportUI viewReportUI = new ViewReportUI(reportFormList);
                 viewReportUI.setVisible(true);
 
             }
         });//添加监听器
         add(queryButton);
+
+        //添加打印报表按钮
+        JButton buttonPrintReport = new JButton("打印报表");
+        buttonPrintReport.setBounds(228, 260, 100, 25);
+        buttonPrintReport.addActionListener(new ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                if (report == null)
+                    JOptionPane.showMessageDialog(null, "无可打印的报表");
+                else {
+                    PrintReport printReport = new PrintReport(report);
+                    if (printReport.printReport()) {
+                        JOptionPane.showMessageDialog(null, "报表打印成功");
+                    } else
+                        JOptionPane.showMessageDialog(null, "报表打印失败");
+                }
+            }
+        });//添加动作监听器
+        add(buttonPrintReport);
     }
 
-    //测试方法
-    public ArrayList<ReportForm> test(ArrayList<Integer> roomList, TypeReport typeReport, Date date) {
-        ArrayList<ReportForm> list = new ArrayList<>();
-        for (Integer i:roomList){
-            ReportForm reportForm = new ReportForm();
-            reportForm.setRoomId(i);
-            list.add(reportForm);
+//    //测试方法
+//    public ArrayList<ReportForm> test(ArrayList<Integer> roomList, TypeReport typeReport, Date date) {
+//        ArrayList<ReportForm> list = new ArrayList<>();
+//        for (Integer i:roomList){
+//            ReportForm reportForm = new ReportForm();
+//            reportForm.setRoomId(i);
+//            list.add(reportForm);
+//        }
+//        return list;
+//    }
+
+    public Report getReportFromJson(JSONObject temp) {
+        Report report1 = new Report();
+        TypeReport typeReport = TypeReport.DAILY;//报表类型
+        int reportType = temp.getInt("reportType");
+        if (reportType == 0)
+            typeReport = TypeReport.DAILY;
+        if (reportType == 1)
+            typeReport = TypeReport.WEEKLY;
+        if (reportType == 2)
+            typeReport = TypeReport.MONTHLY;
+        if (reportType == 3)
+            typeReport = TypeReport.ANNUAL;
+        report1.setTypeReport(typeReport);
+
+        try {
+            report1.setDate(new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss").parse(temp.getString("date")));
+        } catch (ParseException parseException) {
+            parseException.printStackTrace();
         }
-        return list;
-    }
 
+        JSONArray list =  temp.getJSONArray("reportFormList");
+        for (Object o:list){
+            JSONObject json = (JSONObject) o;
+            ReportForm reportForm = new ReportForm(json.getInt("turnTimes"),
+                    json.getLong("useTime"),
+                    json.getDouble("totalFee"),
+                    json.getInt("schedulerTimes"),
+                    json.getInt("customerNumber"),
+                    json.getInt("changeTempTimes"),
+                    json.getInt("changeFanSpeedTimes"),
+                    json.getInt("roomId"));
+            report1.addReportForm(reportForm);
+        }
+        return report1;
+    }
 }

@@ -1,12 +1,8 @@
 package Domain;
 
-import org.jdesktop.swingx.JXDatePicker;
-
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import jxl.*;
 import jxl.write.*;
@@ -14,16 +10,15 @@ import jxl.write.biff.RowsExceededException;
 import Enum.*;
 
 public class PrintReport {
+    private Report report = new Report();
     //构造方法
-    public PrintReport() {
+    public PrintReport(Report report) {
+        this.report = report;
     }
 
     //打印报表，存储到文件，文件名为ReportForm加上当前时间
     public boolean printReport() {
         try {
-            Report report = new Report();
-            report = test();
-
             //打开文件
             WritableWorkbook book = Workbook.createWorkbook(new File("ReportForm" + new SimpleDateFormat(" yyyyMMdd-HHmmss").format(new Date()) + ".xls"));
             //生成名为“第一页”的工作表，参数0表示这是第一页
@@ -46,11 +41,11 @@ public class PrintReport {
             sheet.addCell(new Label(0, 1, new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss").format(report.getDate())));
 
             sheet.addCell(new Label(0, 2, "房间号"));
-            sheet.addCell(new Label(1, 2, "房间开关次数"));
-            sheet.addCell(new Label(2, 2, "空调使用时长"));
+            sheet.addCell(new Label(1, 2, "空调开关次数"));
+            sheet.addCell(new Label(2, 2, "空调服务时长"));
             sheet.addCell(new Label(3, 2, "总费用"));
             sheet.addCell(new Label(4, 2, "被调度的次数"));
-            sheet.addCell(new Label(5, 2, "详单数"));
+            sheet.addCell(new Label(5, 2, "旅客人数"));
             sheet.addCell(new Label(6, 2, "调温次数"));
             sheet.addCell(new Label(7, 2, "调风次数"));
 
@@ -63,7 +58,7 @@ public class PrintReport {
                 sheet.addCell(new Label(2, 3 + i, reportForm.getStringUseTime()));
                 sheet.addCell(new jxl.write.Number(3, 3 + i, reportForm.getTotalFee()));
                 sheet.addCell(new jxl.write.Number(4, 3 + i, reportForm.getSchedulerTimes()));
-                sheet.addCell(new jxl.write.Number(5, 3 + i, reportForm.getDetailBillNumber()));
+                sheet.addCell(new jxl.write.Number(5, 3 + i, reportForm.getCustomerNumber()));
                 sheet.addCell(new jxl.write.Number(6, 3 + i, reportForm.getChangeTempTimes()));
                 sheet.addCell(new jxl.write.Number(7, 3 + i, reportForm.getChangeFanSpeedTimes()));
             }
@@ -84,15 +79,14 @@ public class PrintReport {
         return false;
     }
 
-    //测试方法，返回Report类
-    public Report test() {
-        ArrayList<ReportForm> list = new ArrayList<>();
-        for (int i = 101; i < 120; i++){
-            ReportForm reportForm = new ReportForm();
-            reportForm.setRoomId(i);
-            list.add(reportForm);
-        }
-
-        return new Report(TypeReport.MONTHLY,new Date(),list);
-    }
+//    //测试方法，返回Report类
+//    public Report test() {
+//        ArrayList<ReportForm> list = new ArrayList<>();
+//        for (int i = 101; i < 120; i++){
+//            ReportForm reportForm = new ReportForm();
+//            reportForm.setRoomId(i);
+//            list.add(reportForm);
+//        }
+//        return new Report(TypeReport.MONTHLY,new Date(),list);
+//    }
 }

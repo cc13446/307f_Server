@@ -58,7 +58,7 @@ public class MainUI extends JFrame {
         receptionLabel.setFont(new Font("楷体", Font.PLAIN, 30));
 
         //添加创建账单按钮
-        JButton buttonCreateInvoice = new JButton("创建账单");
+        JButton buttonCreateInvoice = new JButton("查看账单");
         buttonCreateInvoice.setFont(new Font("楷体", Font.PLAIN, 24));
         //buttonCreateRDR.addActionListener();//添加动作监听器
         buttonCreateInvoice.addActionListener(new ActionListener() {
@@ -69,16 +69,16 @@ public class MainUI extends JFrame {
             }
         });
 
-        //添加打印账单按钮
-        JButton buttonPrintInvoice = new JButton("打印账单");
-        buttonPrintInvoice.setFont(new Font("楷体", Font.PLAIN, 24));
-        buttonPrintInvoice.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                PrintInvoiceUI printInvoiceUI=new PrintInvoiceUI();
-                printInvoiceUI.setVisible(true);
-            }
-        });
+//        //添加打印账单按钮
+//        JButton buttonPrintInvoice = new JButton("打印账单");
+//        buttonPrintInvoice.setFont(new Font("楷体", Font.PLAIN, 24));
+//        buttonPrintInvoice.addActionListener(new ActionListener() {
+//
+//            public void actionPerformed(ActionEvent e) {
+//                PrintInvoiceUI printInvoiceUI=new PrintInvoiceUI();
+//                printInvoiceUI.setVisible(true);
+//            }
+//        });
 
         //添加创建详单按钮
         JButton buttonCreateRDR = new JButton("查看详单");
@@ -93,16 +93,16 @@ public class MainUI extends JFrame {
         });
 //        buttonCreateRDR.addActionListener();//添加动作监听器
 
-        //添加打印详单按钮
-        JButton buttonPrintRDR = new JButton("打印详单");
-        buttonPrintRDR.setFont(new Font("楷体", Font.PLAIN, 24));
-        buttonPrintRDR.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-                PrintInvoiceUI printInvoiceUI=new PrintInvoiceUI();
-                printInvoiceUI.setVisible(true);
-            }
-        });
+//        //添加打印详单按钮
+//        JButton buttonPrintRDR = new JButton("打印详单");
+//        buttonPrintRDR.setFont(new Font("楷体", Font.PLAIN, 24));
+//        buttonPrintRDR.addActionListener(new ActionListener() {
+//
+//            public void actionPerformed(ActionEvent e) {
+//                PrintInvoiceUI printInvoiceUI=new PrintInvoiceUI();
+//                printInvoiceUI.setVisible(true);
+//            }
+//        });
 
 
         //经理部分
@@ -115,23 +115,9 @@ public class MainUI extends JFrame {
         buttonQueryReport.setFont(new Font("楷体", Font.PLAIN, 24));
         buttonQueryReport.addActionListener(new ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
-                mainUI.setEnabled(false);//设置本窗口不可选中
-                QueryReportUI queryReport = new QueryReportUI(mainUI);
+//                mainUI.setEnabled(false);//设置本窗口不可选中
+                QueryReportUI queryReport = new QueryReportUI();
                 queryReport.setVisible(true);
-            }
-        });//添加动作监听器
-
-        //添加打印报表按钮
-        JButton buttonPrintReport = new JButton("打印报表");
-        buttonPrintReport.setFont(new Font("楷体", Font.PLAIN, 24));
-        buttonPrintReport.addActionListener(new ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-//                mainUI.setEnabled(false);
-                PrintReport printReport = new PrintReport();
-                if (printReport.printReport()) {
-                    JOptionPane.showMessageDialog(null, "报表打印成功");
-                } else
-                    JOptionPane.showMessageDialog(null, "报表打印失败");
             }
         });//添加动作监听器
 
@@ -177,38 +163,32 @@ public class MainUI extends JFrame {
         s.gridx = 1;
         s.gridy = 1;
         s.gridwidth = 1;
-        s.gridheight = 1;
+        s.gridheight = 2;
         centerPane.add(buttonCreateInvoice, s);
 
-        s.gridx = 1;
-        s.gridy = 2;
-        s.gridwidth = 1;
-        s.gridheight = 1;
-        centerPane.add(buttonPrintInvoice, s);
+//        s.gridx = 1;
+//        s.gridy = 2;
+//        s.gridwidth = 1;
+//        s.gridheight = 1;
+//        centerPane.add(buttonPrintInvoice, s);
 
         s.gridx = 1;
         s.gridy = 3;
         s.gridwidth = 1;
-        s.gridheight = 1;
+        s.gridheight = 2;
         centerPane.add(buttonCreateRDR, s);
 
-        s.gridx = 1;
-        s.gridy = 4;
-        s.gridwidth = 1;
-        s.gridheight = 1;
-        centerPane.add(buttonPrintRDR, s);
+//        s.gridx = 1;
+//        s.gridy = 4;
+//        s.gridwidth = 1;
+//        s.gridheight = 1;
+//        centerPane.add(buttonPrintRDR, s);
 
         s.gridx = 2;
         s.gridy = 1;
         s.gridwidth = 1;
-        s.gridheight = 2;
+        s.gridheight = 4;
         centerPane.add(buttonQueryReport, s);
-
-        s.gridx = 2;
-        s.gridy = 3;
-        s.gridwidth = 1;
-        s.gridheight = 2;
-        centerPane.add(buttonPrintReport, s);
 
     }
 
