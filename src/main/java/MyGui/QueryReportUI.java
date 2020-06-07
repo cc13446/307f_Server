@@ -181,7 +181,7 @@ public class QueryReportUI extends JFrame {
                     //发送请求
                     JSONArray temp = null;
                     try {
-                        temp = httpRequestModel.send(json);
+                        temp = httpRequestModel.send1(json);
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     } catch (InterruptedException interruptedException) {
@@ -252,7 +252,7 @@ public class QueryReportUI extends JFrame {
         report1.setDate(date);
 
 
-        System.out.println(list);
+//        System.out.println(list);
         for (Object o : list) {
             JSONObject json = (JSONObject) o;
             ReportForm reportForm = new ReportForm(json.getInt("turnTimes"),
@@ -265,7 +265,7 @@ public class QueryReportUI extends JFrame {
                     json.getInt("roomId"));
             report1.addReportForm(reportForm);
         }
-        System.out.println(report1.toString());
+//        System.out.println(report1.toString());
         return report1;
     }
 }
