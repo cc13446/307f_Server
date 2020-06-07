@@ -1,5 +1,6 @@
 package MyHttp;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class HttpRequestModel {
 
     }
 
-    public JSONObject send(JSONObject json) throws IOException, InterruptedException {
+    public JSONArray send(JSONObject json) throws IOException, InterruptedException {
         //创建 builder
         HttpClient.Builder builder = HttpClient.newBuilder();
         HttpClient client = builder.version(HttpClient.Version.HTTP_2)
@@ -36,7 +37,8 @@ public class HttpRequestModel {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if(response.statusCode() == 200)
         {
-            return JSONObject.fromObject(response.body());
+            return JSONArray.fromObject(response.body());
+//            return JSONObject.fromObject(response.body());
         }
         else
         {
