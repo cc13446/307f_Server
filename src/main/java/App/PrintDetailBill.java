@@ -26,8 +26,8 @@ public class PrintDetailBill {
         BufferedWriter writer = new BufferedWriter(new FileWriter(filename));
         writer.write("顾客ID为 "+customId+'\n');
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        writer.write("空调开始使用时间："+df.format(detailBill.getRequestOnDate()));
-        writer.write("空调结束使用时间："+df.format(detailBill.getRequestOffDate()));
+        writer.write("空调开始使用时间：" + df.format(detailBill.getRequestOnDate()) + "\n");
+        writer.write("空调结束使用时间：" + df.format(detailBill.getRequestOffDate())+ "\n");
 
         totalFee=0;
         for (int i=0;i<detailBill.getDetailBillList().size();i++){

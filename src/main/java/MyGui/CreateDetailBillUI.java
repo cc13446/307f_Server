@@ -75,7 +75,7 @@ public class CreateDetailBillUI extends JFrame{
         add(requestOnLabel);
 
         requestOnTextField = new JTextArea();
-        requestOnTextField.setBounds(420,40,100,25);
+        requestOnTextField.setBounds(420,40,150,25);
         add(requestOnTextField);
 
         requestOffLabel = new JLabel("空调结束使用时间:",JLabel.CENTER);
@@ -83,7 +83,7 @@ public class CreateDetailBillUI extends JFrame{
         add(requestOffLabel);
 
         requestOffTextField = new JTextArea();
-        requestOffTextField.setBounds(420,75,100,25);
+        requestOffTextField.setBounds(420,75,150,25);
         add(requestOffTextField);
 
         columnName = new Vector();
@@ -151,9 +151,9 @@ public class CreateDetailBillUI extends JFrame{
                 } catch (ParseException parseException) {
                     parseException.printStackTrace();
                 }
-
-                requestOnTextField.setText(msg.getString("requestOnDate"));
-                requestOffTextField.setText(msg.getString("requestOffDate"));
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                requestOnTextField.setText(df.format(detailBill.getRequestOnDate()));
+                requestOffTextField.setText(df.format(detailBill.getRequestOffDate()));
                 JSONArray data=msg.getJSONArray("data");
                 for (Object object:data){
                     JSONObject dataJson=(JSONObject)object;
@@ -177,13 +177,16 @@ public class CreateDetailBillUI extends JFrame{
 
                 }
                 detailBill.setDetailBillList(detailBillItems);
+                df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 for (DetailBillItem item:detailBill.getDetailBillList()){
                     Vector row = new Vector();
-                    row.add(item.getStartTime());
-                    row.add(item.getEndTime());
+                    row.add(df.format(item.getStartTime()));
+                    row.add(df.format(item.getEndTime()));
                     row.add(item.getMode());
                     row.add(item.getFanSpeed());
                     row.add(item.getTargetTemp());
+                    long ms = item.getDuration();
+                    row.add(ms/1000/60/60+"小时"+ms/1000/60%60+"分"+ms/1000%60+"秒");
                     row.add(item.getFeeRate());
                     row.add(item.getFee());
                     tableModel.addRow(row);
