@@ -94,18 +94,6 @@ public class MainUI extends JFrame {
                 //System.out.println("t");
             }
         });
-//        buttonCreateRDR.addActionListener();//添加动作监听器
-
-//        //添加打印详单按钮
-//        JButton buttonPrintRDR = new JButton("打印详单");
-//        buttonPrintRDR.setFont(new Font("楷体", Font.PLAIN, 24));
-//        buttonPrintRDR.addActionListener(new ActionListener() {
-//
-//            public void actionPerformed(ActionEvent e) {
-//                PrintInvoiceUI printInvoiceUI=new PrintInvoiceUI();
-//                printInvoiceUI.setVisible(true);
-//            }
-//        });
 
 
         //经理部分
@@ -170,11 +158,6 @@ public class MainUI extends JFrame {
         s.gridheight = 2;
         centerPane.add(buttonCreateInvoice, s);
 
-//        s.gridx = 1;
-//        s.gridy = 2;
-//        s.gridwidth = 1;
-//        s.gridheight = 1;
-//        centerPane.add(buttonPrintInvoice, s);
 
         s.gridx = 1;
         s.gridy = 3;
@@ -182,11 +165,6 @@ public class MainUI extends JFrame {
         s.gridheight = 2;
         centerPane.add(buttonCreateRDR, s);
 
-//        s.gridx = 1;
-//        s.gridy = 4;
-//        s.gridwidth = 1;
-//        s.gridheight = 1;
-//        centerPane.add(buttonPrintRDR, s);
 
         s.gridx = 2;
         s.gridy = 1;

@@ -13,8 +13,10 @@ import java.util.concurrent.Executors;
 
 public class HttpRequestModel {
     public String requestMethod = "POST";
+    public String iP;
 
     public HttpRequestModel() {
+        this.iP = "127.0.0.1:8080";
 
     }
     public JSONObject send(JSONObject json) throws IOException, InterruptedException {
@@ -29,7 +31,7 @@ public class HttpRequestModel {
         HttpRequest.Builder reBuilder = HttpRequest.newBuilder();
         HttpRequest request = reBuilder.header("Content-Type", "application/json")
                 .version(HttpClient.Version.HTTP_2)
-                .uri(URI.create("http://localhost:8080/"))
+                .uri(URI.create("http://" + iP + "/"))
                 .timeout(Duration.ofMillis(50000))
                 .method(requestMethod, HttpRequest.BodyPublishers.ofString(json.toString()))
                 .build();
@@ -55,7 +57,7 @@ public class HttpRequestModel {
         HttpRequest.Builder reBuilder = HttpRequest.newBuilder();
         HttpRequest request = reBuilder.header("Content-Type", "application/json")
                 .version(HttpClient.Version.HTTP_2)
-                .uri(URI.create("http://localhost:8080/"))
+                .uri(URI.create("http://" + iP + "/"))
                 .timeout(Duration.ofMillis(50000))
                 .method(requestMethod, HttpRequest.BodyPublishers.ofString(json.toString()))
                 .build();

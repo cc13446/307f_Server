@@ -138,7 +138,7 @@ public class PowerOnUI extends JFrame {
                 tempHighLimit = Double.parseDouble(textTempHighLimit.getText());
                 tempLowLimit = Double.parseDouble(textTempLowLimit.getText());
                 defaultTargetTemp = Double.parseDouble(textDefaultTargetTemp.getText());
-                mode = modeComboBox.getSelectedIndex() == 0? Mode.COLD: Mode.HOT;
+                mode = modeComboBox.getSelectedIndex() == 1? Mode.COLD: Mode.HOT;
 
                 System.out.println("确认空调初始化参数按钮被点击");
                 String printMsg = "mode:" + mode.toString() + " feeRateHigh:" + feeRateHigh + " feeRateMid:" + feeRateMid + " feeRateLow:" + feeRateLow

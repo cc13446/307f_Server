@@ -5,7 +5,6 @@ import App.PrintInvoice;
 import Domain.DetailBill;
 import Domain.DetailBillItem;
 import MyHttp.HttpRequestModel;
-import MyListener.CreateDetailBillListener;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.jdesktop.swingx.JXDatePicker;
@@ -42,7 +41,6 @@ public class CreateDetailBillUI extends JFrame{
     private JButton detailBillButton;
     private JButton printButton;
     private JTextField roomTextField;
-    private CreateDetailBillListener createDetailBillListener;
     private DetailBill detailBill;
     private int customId;
     private boolean result;
@@ -186,18 +184,11 @@ public class CreateDetailBillUI extends JFrame{
                     tableModel.addRow(row);
                 }
 
-//                jt=new JTable(rowData,columnName);
-//                DefaultTableModel model = new DefaultTableModel(jt, columnName);
-//                jt.setModel(model);
 
 
             }
         });
 
-        //jt = new JTable(rowData, columnName);
-//        jt=new JTable(rowData,columnName);
-//        DefaultTableModel model = new DefaultTableModel(jt, columnName);
-//        jt.setModel(model);
         tableModel.setColumnIdentifiers(columnName);
         jTable=new JTable(tableModel);
         jsp = new JScrollPane(jTable);
@@ -231,21 +222,13 @@ public class CreateDetailBillUI extends JFrame{
     }
 
     public static boolean isNumeric(String str) {
-
         for (int i = 0; i < str.length(); i++) {
-
             System.out.println(str.charAt(i));
-
             if (!Character.isDigit(str.charAt(i))) {
-
                 return false;
-
             }
-
         }
-
         return true;
-
     }
 
 }
