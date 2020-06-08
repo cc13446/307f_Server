@@ -43,7 +43,7 @@ public class PrintReport {
             sheet.addCell(new Label(0, 2, "房间号"));
             sheet.addCell(new Label(1, 2, "空调开关次数"));
             sheet.addCell(new Label(2, 2, "空调服务时长"));
-            sheet.addCell(new Label(3, 2, "总费用"));
+            sheet.addCell(new Label(3, 2, "总费用/元"));
             sheet.addCell(new Label(4, 2, "被调度的次数"));
             sheet.addCell(new Label(5, 2, "旅客人数"));
             sheet.addCell(new Label(6, 2, "调温次数"));
@@ -78,15 +78,4 @@ public class PrintReport {
         }
         return false;
     }
-
-//    //测试方法，返回Report类
-//    public Report test() {
-//        ArrayList<ReportForm> list = new ArrayList<>();
-//        for (int i = 101; i < 120; i++){
-//            ReportForm reportForm = new ReportForm();
-//            reportForm.setRoomId(i);
-//            list.add(reportForm);
-//        }
-//        return new Report(TypeReport.MONTHLY,new Date(),list);
-//    }
 }
