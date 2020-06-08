@@ -47,31 +47,47 @@ public class CreateDetailBillUI extends JFrame{
     private int customId;
     private boolean result;
     private JTable jTable;
+    private JLabel roomID;
+    private JLabel requestOnLabel;
+    private JTextArea requestOnTextField;
+    private JLabel requestOffLabel;
+    private JTextArea requestOffTextField;
+    private DefaultTableModel tableModel;
 
     public CreateDetailBillUI() {
         setTitle("创建详单");
-        setBounds(610, 140, 470, 450);//设置窗口大小
+        setBounds(610, 140, 800, 500);//设置窗口大小
         setResizable(false);//设置窗口不能改变大小
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);//关闭窗口 dispose这个窗口
         setLayout(null);
 
-
         //房间号标签
-        JLabel roomID = new JLabel("输入房间号:",JLabel.CENTER);
-        roomID.setBounds(120,0,80,40);
+        roomID = new JLabel("输入房间号:",JLabel.CENTER);
+        roomID.setBounds(280,5,100,25);
         add(roomID);
 
         //房间号输入框
         roomTextField = new JTextField();
-        roomTextField.setBounds(270,5,100,30);
+        roomTextField.setBounds(420,5,100,25);
         add(roomTextField);
 
+        requestOnLabel = new JLabel("空调开始使用时间:",JLabel.CENTER);
+        requestOnLabel.setBounds(280,40,100,25);
+        add(requestOnLabel);
 
-        //jt=new JTable();
+        requestOnTextField = new JTextArea();
+        requestOnTextField.setBounds(420,40,100,25);
+        add(requestOnTextField);
+
+        requestOffLabel = new JLabel("空调结束使用时间:",JLabel.CENTER);
+        requestOffLabel.setBounds(280,75,100,25);
+        add(requestOffLabel);
+
+        requestOffTextField = new JTextArea();
+        requestOffTextField.setBounds(420,75,100,25);
+        add(requestOffTextField);
 
         columnName = new Vector();
-        //设置列名
-        //columnName.add("房间号");
         columnName.add("开始时间");
         columnName.add("结束时间");
         columnName.add("模式");
@@ -81,31 +97,38 @@ public class CreateDetailBillUI extends JFrame{
         columnName.add("费率");
         columnName.add("费用");
 
-        DefaultTableModel tableModel=new DefaultTableModel();
+        tableModel=new DefaultTableModel();
+        tableModel.setColumnIdentifiers(columnName);
 
         detailBillButton = new JButton();
         detailBillButton.setText("查看详单");
-        detailBillButton.setBounds(120,60,100,30);
+        detailBillButton.setBounds(280,120,100,30);
         add(detailBillButton);
 
+        printButton=new JButton();
+        printButton.setText("打印详单");
+        printButton.setBounds(420,120,100,30);
+        add(printButton);
+        printButton.setEnabled(false);
 
         detailBillButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //获取详单信息
                 detailBill=new DetailBill();
+                if (roomTextField.getText().isEmpty()){
+                    JOptionPane.showMessageDialog(null,"输入房间号不能为空！");
+                }
                 if (isNumeric(roomTextField.getText())==false){
-
                     JOptionPane.showMessageDialog(null,"输入房间号不合法");
-
                 }
                 roomId=Integer.parseInt(roomTextField.getText());
 
+                //网络请求
                 HttpRequestModel httpRequestModel = new HttpRequestModel();
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("roomId",roomId);
                 jsonObject.put("msgType",3);
-
                 JSONObject msg=new JSONObject();
 
                 try {
@@ -130,8 +153,9 @@ public class CreateDetailBillUI extends JFrame{
                     parseException.printStackTrace();
                 }
 
+                requestOnTextField.setText(msg.getString("requestOnDate"));
+                requestOffTextField.setText(msg.getString("requestOffDate"));
                 JSONArray data=msg.getJSONArray("data");
-                //DetailBillItem item=new DetailBillItem();
                 for (Object object:data){
                     JSONObject dataJson=(JSONObject)object;
                     DetailBillItem item=new DetailBillItem();
@@ -142,35 +166,18 @@ public class CreateDetailBillUI extends JFrame{
                     } catch (ParseException parseException) {
                         parseException.printStackTrace();
                     }
-                    //mode
-                    if (dataJson.getInt("mode")==0){
-                        item.setMode(Mode.HOT);
-                    }
-                    else if (dataJson.getInt("mode")==1){
-                        item.setMode(Mode.COLD);
-                    }
-                    else if (dataJson.getInt("mode")==2){
-                        item.setMode(Mode.FAN);
-                    }
-                    //fanspeed
 
+
+                    item.setMode(Mode.values()[dataJson.getInt("mode")]);
                     item.setFanSpeed(FanSpeed.values()[dataJson.getInt("fanSpeed")]);
-
-
-                    //targetTemp
                     item.setTargetTemp(dataJson.getDouble("targetTemp"));
                     item.setDuration(dataJson.getLong("duration"));
                     item.setFeeRate(dataJson.getDouble("feeRate"));
                     item.setFee(dataJson.getDouble("fee"));
                     detailBillItems.add(item);
 
-
-
                 }
                 detailBill.setDetailBillList(detailBillItems);
-
-                rowData = new Vector();
-
                 for (DetailBillItem item:detailBill.getDetailBillList()){
                     Vector row = new Vector();
                     row.add(item.getStartTime());
@@ -180,30 +187,20 @@ public class CreateDetailBillUI extends JFrame{
                     row.add(item.getTargetTemp());
                     row.add(item.getFeeRate());
                     row.add(item.getFee());
-                    //rowData.add(row);
                     tableModel.addRow(row);
                 }
-
-//                jt=new JTable(rowData,columnName);
-//                DefaultTableModel model = new DefaultTableModel(jt, columnName);
-//                jt.setModel(model);
-
+                printButton.setEnabled(true);
 
             }
         });
 
-        //jt = new JTable(rowData, columnName);
-//        jt=new JTable(rowData,columnName);
-//        DefaultTableModel model = new DefaultTableModel(jt, columnName);
-//        jt.setModel(model);
+
         jTable=new JTable(tableModel);
         jsp = new JScrollPane(jTable);
-        jsp.setBounds(5,105,440,255);
+        jsp.setBounds(5,160,780,255);
         add(jsp);
 
-        printButton=new JButton();
-        printButton.setText("打印详单");
-        printButton.setBounds(270,60,100,30);
+
         printButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -222,27 +219,18 @@ public class CreateDetailBillUI extends JFrame{
                 }
             }
         });
-        add(printButton);
+
 
 
     }
 
     public static boolean isNumeric(String str) {
-
         for (int i = 0; i < str.length(); i++) {
-
             System.out.println(str.charAt(i));
-
             if (!Character.isDigit(str.charAt(i))) {
-
                 return false;
-
             }
-
         }
-
         return true;
-
     }
-
 }

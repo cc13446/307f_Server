@@ -20,6 +20,16 @@ public class CreateInvoiceUI extends JFrame{
     private Invoice invoice;
     private boolean result;
     private int customId;
+    private JLabel roomID;
+    private JTextField roomTextField;
+    private JLabel requestOnLabel;
+    private JTextArea requestOnTextField;
+    private JLabel requestOffLabel;
+    private JTextArea requestOffTextField;
+    private JLabel invoiceText;
+    private JTextArea fee;
+    private JButton printButton;
+    private JButton queryButton;
 
     public CreateInvoiceUI(){
         setTitle("查看账单");
@@ -28,59 +38,52 @@ public class CreateInvoiceUI extends JFrame{
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);//关闭窗口 dispose这个窗口
         setLayout(null);
 
-
         //房间号标签
-        JLabel roomID = new JLabel("输入房间号:",JLabel.CENTER);
-        roomID.setBounds(8,0,80,40);
+        roomID = new JLabel("输入房间号:",JLabel.CENTER);
+        roomID.setBounds(8,5,100,25);
         add(roomID);
 
         //房间号输入框
-        JTextField roomTextField = new JTextField();
-        roomTextField.setBounds(150,5,80,30);
+        roomTextField = new JTextField();
+        roomTextField.setBounds(180,5,100,25);
         add(roomTextField);
 
+        requestOnLabel = new JLabel("空调开始使用时间:",JLabel.CENTER);
+        requestOnLabel.setBounds(8,40,100,25);
+        add(requestOnLabel);
 
-        JLabel invoiceText = new JLabel("共需交费￥:",JLabel.CENTER);
-        invoiceText.setBounds(8,60,80,40);
+        requestOnTextField = new JTextArea();
+        requestOnTextField.setBounds(180,40,100,25);
+        add(requestOnTextField);
+
+        requestOffLabel = new JLabel("空调结束使用时间:",JLabel.CENTER);
+        requestOffLabel.setBounds(8,75,100,25);
+        add(requestOffLabel);
+
+        requestOffTextField = new JTextArea();
+        requestOffTextField.setBounds(180,75,100,25);
+        add(requestOffTextField);
+
+
+        invoiceText = new JLabel("共需交费￥:",JLabel.CENTER);
+        invoiceText.setBounds(8,110,100,25);
         add(invoiceText);
         //显示总费用
-        JTextArea fee = new JTextArea();
+        fee = new JTextArea();
         fee.setText("totalFee");
         fee.setEditable(false);
-        fee.setBounds(150,60,200,40);
+        fee.setBounds(180,110,200,25);
         add(fee);
 
-
-        /***
-         * ### to
-         *
-         * ```json
-         * {
-         *     "msgType":  2,
-         *     "roomId": 1
-         * }
-         * ```
-         *
-         * ### from
-         *
-         * ```json
-         * {
-         *     "customId":10,
-         *      "totalFee" : 20.0,
-         *     "requestOnDate": 2020-10-20 00:00:00,
-         *      "requestOffDate": 2020-10-20 00:00:00
-         * }
-         */
-
-        JButton printButton = new JButton();
+        printButton = new JButton();
         printButton.setText("打印账单");
-        printButton.setBounds(180,120,100,30);
+        printButton.setBounds(180,145,100,30);
         printButton.setEnabled(false);
 
         //添加按钮
-        JButton queryButton = new JButton();
+        queryButton = new JButton();
         queryButton.setText("查看总费用");
-        queryButton.setBounds(60,120,100,30);
+        queryButton.setBounds(60,145,100,30);
         queryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -89,9 +92,10 @@ public class CreateInvoiceUI extends JFrame{
                 roomId=Integer.parseInt(roomTextField.getText());
 
                 if (isNumeric(roomTextField.getText())==false){
-
                     JOptionPane.showMessageDialog(null,"输入房间号不合法");
-
+                }
+                if (roomTextField.getText().isEmpty()){
+                    JOptionPane.showMessageDialog(null,"输入房间号不能为空！");
                 }
 
                 System.out.println("房间号"+roomId);
@@ -110,6 +114,8 @@ public class CreateInvoiceUI extends JFrame{
                     invoice.setTotalFee(msg.getDouble("totalFee"));
                     System.out.println(invoice);
                     fee.setText(String.valueOf(invoice.getTotalFee()));
+                    requestOnTextField.setText(msg.getString("requestOnDate"));
+                    requestOffTextField.setText("requestOffDate");
                     printButton.setEnabled(true);
                 } catch (Exception exception) {
                     exception.printStackTrace();
@@ -119,9 +125,6 @@ public class CreateInvoiceUI extends JFrame{
             }
         });
         add(queryButton);
-
-
-
 
         printButton.addActionListener(new ActionListener() {
             @Override
@@ -145,22 +148,13 @@ public class CreateInvoiceUI extends JFrame{
         });
         add(printButton);
 
-
-
-
     }
     public static boolean isNumeric(String str) {
-
         for (int i = 0; i < str.length(); i++) {
-
             System.out.println(str.charAt(i));
-
             if (!Character.isDigit(str.charAt(i))) {
-
                 return false;
-
             }
-
         }
 
         return true;
