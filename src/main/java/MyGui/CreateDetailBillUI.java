@@ -11,6 +11,7 @@ import net.sf.json.JSONObject;
 import org.jdesktop.swingx.JXDatePicker;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,7 +35,8 @@ public class CreateDetailBillUI extends JFrame{
     private Date dateIn;
     private Date dateOut;
     private int roomId;
-    private Vector columnName,rowData;
+    private Vector rowData;
+    private final Vector columnName;
     private JTable jt = null;
     private JScrollPane jsp = null;
     private JButton detailBillButton;
@@ -44,6 +46,7 @@ public class CreateDetailBillUI extends JFrame{
     private DetailBill detailBill;
     private int customId;
     private boolean result;
+    private JTable jTable;
 
     public CreateDetailBillUI() {
         setTitle("创建详单");
@@ -64,6 +67,7 @@ public class CreateDetailBillUI extends JFrame{
         add(roomTextField);
 
 
+        //jt=new JTable();
 
         columnName = new Vector();
         //设置列名
@@ -77,9 +81,8 @@ public class CreateDetailBillUI extends JFrame{
         columnName.add("费率");
         columnName.add("费用");
 
+        DefaultTableModel tableModel=new DefaultTableModel();
 
-
-        //按钮
         detailBillButton = new JButton();
         detailBillButton.setText("查看详单");
         detailBillButton.setBounds(120,60,100,30);
@@ -91,11 +94,6 @@ public class CreateDetailBillUI extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 //获取详单信息
                 detailBill=new DetailBill();
-//        detailBill.setDateIn(dateInPick.getDate());
-//        detailBill.setDateOut(dateOutPick.getDate());
-//        detailBill.setRoomId(Integer.parseInt(roomTextField.getText()));
-
-
                 if (isNumeric(roomTextField.getText())==false){
 
                     JOptionPane.showMessageDialog(null,"输入房间号不合法");
@@ -103,13 +101,11 @@ public class CreateDetailBillUI extends JFrame{
                 }
                 roomId=Integer.parseInt(roomTextField.getText());
 
-                System.out.println("房间号"+roomId);
                 HttpRequestModel httpRequestModel = new HttpRequestModel();
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("roomId",roomId);
                 jsonObject.put("msgType",3);
 
-                JSONArray items=new JSONArray();
                 JSONObject msg=new JSONObject();
 
                 try {
@@ -121,30 +117,6 @@ public class CreateDetailBillUI extends JFrame{
                 } catch (InterruptedException interruptedException) {
                     interruptedException.printStackTrace();
                 }
-
-
-                /**
-                 * {
-                 *     "customId":10,
-                 *     "requestOnDate": 2020-10-20 00:00:00,
-                 *     "requestOffDate": 2020-10-20 00:00:00，
-                 *     "data":
-                 *     [
-                 *     {
-                 *     "startTime":2020-10-20 00:00:00,
-                 *     "endTime":2020-10-20 00:00:00,
-                 *     "mode":0,//1,2 制热制冷送风
-                 *     "fanSpeed":0,//12
-                 *     "targetTemp":26.0,
-                 *     "fee":26.0,
-                 *     "feeRate":0.667,
-                 *     "duration":10000000
-                 * }
-                 * ...
-                 * ]
-                 * }
-                 * ```
-                 */
 
                 ArrayList<DetailBillItem> detailBillItems=new ArrayList<>();
                 customId=msg.getInt("customId");
@@ -208,15 +180,24 @@ public class CreateDetailBillUI extends JFrame{
                     row.add(item.getTargetTemp());
                     row.add(item.getFeeRate());
                     row.add(item.getFee());
-                    rowData.add(row);
+                    //rowData.add(row);
+                    tableModel.addRow(row);
                 }
+
+//                jt=new JTable(rowData,columnName);
+//                DefaultTableModel model = new DefaultTableModel(jt, columnName);
+//                jt.setModel(model);
 
 
             }
         });
 
-        jt = new JTable(rowData, columnName);
-        jsp = new JScrollPane(jt);
+        //jt = new JTable(rowData, columnName);
+//        jt=new JTable(rowData,columnName);
+//        DefaultTableModel model = new DefaultTableModel(jt, columnName);
+//        jt.setModel(model);
+        jTable=new JTable(tableModel);
+        jsp = new JScrollPane(jTable);
         jsp.setBounds(5,105,440,255);
         add(jsp);
 
@@ -244,12 +225,6 @@ public class CreateDetailBillUI extends JFrame{
         add(printButton);
 
 
-
-//        detailBill=new DetailBill();
-//        createDetailBillListener=new CreateDetailBillListener(detailBill,this,roomTextField,detailBillButton);
-//        detailBillButton.addActionListener(createDetailBillListener);
-//        roomTextField.addActionListener(createDetailBillListener);
-//        printButton.addActionListener(createDetailBillListener);
     }
 
     public static boolean isNumeric(String str) {
