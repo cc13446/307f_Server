@@ -5,7 +5,7 @@ import Domain.ReportForm;
 import MyHttp.HttpRequestModel;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import Enum.Mode;
+import Enum.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -42,6 +42,7 @@ public class RoomStateUI extends JFrame {
         columnNames.add("总服务时间");
 
         jp = new JPanel(new BorderLayout());
+        jp.setSize(300,400);
         // 创建表格
         roomStateTable = new JTable();
         requestRoomState();
@@ -62,7 +63,6 @@ public class RoomStateUI extends JFrame {
         jp.add(flush, BorderLayout.SOUTH);
 
         setContentPane(jp);
-        pack();
         setLocationRelativeTo(null);
     }
 
@@ -101,8 +101,8 @@ public class RoomStateUI extends JFrame {
             Vector<String> room = new Vector<String>();
             room.add(Integer.toString(json.getInt("roomID")));
             room.add(Integer.toString(json.getInt("customerID")));
-            Mode mode = Mode.values()[json.getInt("state")];
-            room.add(mode.toString());
+            State state = State.values()[json.getInt("state")];
+            room.add(state.toString());
             room.add(Double.toString(json.getDouble("currentTemp")));
             room.add(Double.toString(json.getDouble("targetTemp")));
             room.add(Integer.toString(json.getInt("fanSpeed")));
