@@ -40,39 +40,39 @@ public class CreateInvoiceUI extends JFrame{
 
         //房间号标签
         roomID = new JLabel("输入房间号:",JLabel.CENTER);
-        roomID.setBounds(8,5,100,25);
+        roomID.setBounds(8,5,150,25);
         add(roomID);
 
         //房间号输入框
         roomTextField = new JTextField();
-        roomTextField.setBounds(180,5,100,25);
+        roomTextField.setBounds(180,5,150,25);
         add(roomTextField);
 
         requestOnLabel = new JLabel("空调开始使用时间:",JLabel.CENTER);
-        requestOnLabel.setBounds(8,40,100,25);
+        requestOnLabel.setBounds(8,40,150,25);
         add(requestOnLabel);
 
         requestOnTextField = new JTextArea();
-        requestOnTextField.setBounds(180,40,100,25);
+        requestOnTextField.setBounds(180,40,150,25);
         add(requestOnTextField);
 
         requestOffLabel = new JLabel("空调结束使用时间:",JLabel.CENTER);
-        requestOffLabel.setBounds(8,75,100,25);
+        requestOffLabel.setBounds(8,75,150,25);
         add(requestOffLabel);
 
         requestOffTextField = new JTextArea();
-        requestOffTextField.setBounds(180,75,100,25);
+        requestOffTextField.setBounds(180,75,150,25);
         add(requestOffTextField);
 
 
         invoiceText = new JLabel("共需交费￥:",JLabel.CENTER);
-        invoiceText.setBounds(8,110,100,25);
+        invoiceText.setBounds(8,110,150,25);
         add(invoiceText);
         //显示总费用
         fee = new JTextArea();
         fee.setText("totalFee");
         fee.setEditable(false);
-        fee.setBounds(180,110,200,25);
+        fee.setBounds(180,110,150,25);
         add(fee);
 
         printButton = new JButton();
@@ -114,8 +114,9 @@ public class CreateInvoiceUI extends JFrame{
                     invoice.setTotalFee(msg.getDouble("totalFee"));
                     System.out.println(invoice);
                     fee.setText(String.valueOf(invoice.getTotalFee()));
-                    requestOnTextField.setText(msg.getString("requestOnDate"));
-                    requestOffTextField.setText("requestOffDate");
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    requestOnTextField.setText(df.format(invoice.getRequestOnDate()));
+                    requestOffTextField.setText(df.format(invoice.getRequestOffDate()));
                     printButton.setEnabled(true);
                 } catch (Exception exception) {
                     exception.printStackTrace();
@@ -130,7 +131,7 @@ public class CreateInvoiceUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //print
-                PrintInvoice print=new PrintInvoice(customId,invoice);
+                PrintInvoice print=new PrintInvoice(invoice.getCustomId(),invoice);
                 try {
                     result=print.printInvoice();
                 } catch (IOException ioException) {

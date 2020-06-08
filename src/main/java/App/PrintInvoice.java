@@ -22,8 +22,8 @@ public class PrintInvoice {
         BufferedWriter writer = new BufferedWriter(new FileWriter(Invoice));
         writer.write("顾客"+customId+'\n');
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        writer.write("空调开始使用时间："+df.format(invoice.getRequestOnDate()));
-        writer.write("空调结束使用时间："+df.format(invoice.getRequestOffDate()));
+        writer.write("空调开始使用时间："+df.format(invoice.getRequestOnDate()) + "\n");
+        writer.write("空调结束使用时间："+df.format(invoice.getRequestOffDate()) + "\n");
         writer.write("总费用:"+invoice.getTotalFee()+'\n');
         writer.close();
         return true;
