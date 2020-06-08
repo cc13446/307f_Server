@@ -18,12 +18,13 @@ public class PrintInvoice {
     public boolean printInvoice() throws IOException {
         String filename="Invoice"+customId+".txt";
         File Invoice=new File(filename);
-        BufferedWriter writer = new BufferedWriter(new FileWriter("InvoiceFile.txt"));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(Invoice));
         writer.write("顾客"+customId+'\n');
         writer.write(invoice.getRequestOnDate()+"-----"+invoice.getRequestOffDate()+'\n');
         writer.write("总费用:"+invoice.getTotalFee()+'\n');
 //        writer.write("入住时间"+dateIn.toString()+'\n');
 //        writer.write("退房时间"+dateOut.toString()+'\n');
+        writer.close();
         return true;
     }
 }

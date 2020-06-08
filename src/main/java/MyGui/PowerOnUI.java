@@ -5,6 +5,7 @@ import Enum.*;
 import MyHttp.HttpRequestModel;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.log4j.chainsaw.Main;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -29,7 +30,7 @@ public class PowerOnUI extends JFrame {
         setSize(250, 330);
         setResizable(false);
 
-        String[] modeList = new String[]{"制冷", "制热"};
+        String[] modeList = new String[]{"制热", "制冷"};
 
         // 创建本窗口所有基本组件
         JButton confirmMode = new JButton("确认空调模式");
@@ -49,88 +50,6 @@ public class PowerOnUI extends JFrame {
         JLabel labelTempLowLimit = new JLabel("最低温度");
         JLabel labelDefaultTargetTemp = new JLabel("默认温度");
 
-        // 使用网格袋布局，效果不好
-//        GridBagLayout gridBag = new GridBagLayout();
-//        JPanel jp = new JPanel(gridBag);
-//
-//        GridBagConstraints c = null;
-//
-//        c = new GridBagConstraints();
-//        gridBag.addLayoutComponent(labelMode, c);
-//
-//        c = new GridBagConstraints();
-//        gridBag.addLayoutComponent(modeComboBox, c);
-//
-//        c = new GridBagConstraints();
-//        c.gridwidth = GridBagConstraints.REMAINDER;
-//        c.fill = GridBagConstraints.BOTH;
-//        gridBag.addLayoutComponent(confirmMode, c);
-//
-//        c = new GridBagConstraints();
-//        gridBag.addLayoutComponent(labelFeeRateHigh, c);
-//
-//        c = new GridBagConstraints();
-//        gridBag.addLayoutComponent(labelFeeRateMid, c);
-//
-//        c = new GridBagConstraints();
-//        c.gridwidth = GridBagConstraints.REMAINDER;
-//        c.fill = GridBagConstraints.BOTH;
-//        gridBag.addLayoutComponent(labelFeeRateLow, c);
-//
-//        c = new GridBagConstraints();
-//        gridBag.addLayoutComponent(textFeeRateHigh, c);
-//
-//        c = new GridBagConstraints();
-//        gridBag.addLayoutComponent(textFeeRateMid, c);
-//
-//        c = new GridBagConstraints();
-//        c.gridwidth = GridBagConstraints.REMAINDER;
-//        c.fill = GridBagConstraints.BOTH;
-//        gridBag.addLayoutComponent(textFeeRateLow, c);
-//
-//        c = new GridBagConstraints();
-//        gridBag.addLayoutComponent(labelTempHighLimit, c);
-//
-//        c = new GridBagConstraints();
-//        gridBag.addLayoutComponent(labelTempLowLimit, c);
-//
-//        c = new GridBagConstraints();
-//        c.gridwidth = GridBagConstraints.REMAINDER;
-//        c.fill = GridBagConstraints.BOTH;
-//        gridBag.addLayoutComponent(labelDefaultTargetTemp, c);
-//
-//        c = new GridBagConstraints();
-//        gridBag.addLayoutComponent(textTempHighLimit, c);
-//
-//        c = new GridBagConstraints();
-//        gridBag.addLayoutComponent(textTempLowLimit, c);
-//
-//        c = new GridBagConstraints();
-//        c.gridwidth = GridBagConstraints.REMAINDER;
-//        c.fill = GridBagConstraints.BOTH;
-//        gridBag.addLayoutComponent(textDefaultTargetTemp, c);
-//
-//        c = new GridBagConstraints();
-//        c.gridwidth = GridBagConstraints.REMAINDER;
-//        c.fill = GridBagConstraints.BOTH;
-//        gridBag.addLayoutComponent(confirmPara, c);
-//
-//        jp.add(labelMode);
-//        jp.add(modeComboBox);
-//        jp.add(confirmMode);
-//        jp.add(labelFeeRateHigh);
-//        jp.add(labelFeeRateMid);
-//        jp.add(labelFeeRateLow);
-//        jp.add(textFeeRateHigh);
-//        jp.add(textFeeRateMid);
-//        jp.add(textFeeRateLow);
-//        jp.add(labelTempHighLimit);
-//        jp.add(labelTempLowLimit);
-//        jp.add(labelDefaultTargetTemp);
-//        jp.add(textTempHighLimit);
-//        jp.add(textTempLowLimit);
-//        jp.add(textDefaultTargetTemp);
-//        jp.add(confirmPara);
 
         // 使用分组布局
         JPanel jp = new JPanel();
@@ -227,7 +146,7 @@ public class PowerOnUI extends JFrame {
                 System.out.println("空调初始化参数为：" + printMsg);
 
                 // 发送信息
-                sendPara();
+                sendPara(relativeWindow);
             }
         });
 
@@ -276,7 +195,7 @@ public class PowerOnUI extends JFrame {
     }
 
     // 发送从UI获得的空调初始化参数
-    public void sendPara() {
+    public void sendPara(JFrame relativeWindow) {
         System.out.println("准备发送空调默认参数");
 
         HttpRequestModel httpRequestModel = new HttpRequestModel();
@@ -284,7 +203,7 @@ public class PowerOnUI extends JFrame {
 
         //写json包
         json.put("msgType", 0);
-        json.put("mode", mode);
+        json.put("mode", mode.ordinal());
         json.put("tempHighLimit", tempHighLimit);
         json.put("tempLowLimit", tempLowLimit);
         json.put("defaultTargetTemp", defaultTargetTemp);
@@ -312,6 +231,10 @@ public class PowerOnUI extends JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "发送请求失败");
         }
+        ((MainUI) relativeWindow).setButtonCheckRoomStateEnabled(true);
+        ((MainUI) relativeWindow).setButtonCreateInvoiceEnabled(true);
+        ((MainUI) relativeWindow).setButtonCreateRDREnabled(true);
+        ((MainUI) relativeWindow).setButtonQueryReportEnabled(true);
         dispose();
     }
 }

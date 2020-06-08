@@ -8,6 +8,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainUI extends JFrame {
+    private JPanel centerPane;
+    private JLabel administratorLabel;
+    private JButton buttonPowerON;
+    private JButton buttonCheckRoomState;
+    private JLabel receptionLabel;
+    private JButton buttonCreateInvoice;
+    private JButton buttonCreateRDR;
+    private JLabel managerLabel;
+    private JButton buttonQueryReport;
+
     //构造方法
     public MainUI() {
         final MainUI mainUI = this;
@@ -18,18 +28,18 @@ public class MainUI extends JFrame {
 //        setLayout(new GridBagLayout());
 
         //中间容器
-        JPanel centerPane = new JPanel();
+        centerPane = new JPanel();
         centerPane.setLayout(new GridBagLayout());
         getContentPane().add(centerPane);
 
 
         //管理员部分
         //添加标题
-        JLabel administratorLabel = new JLabel("管理员", JLabel.CENTER);
+        administratorLabel = new JLabel("管理员", JLabel.CENTER);
         administratorLabel.setFont(new Font("楷体", Font.PLAIN, 30));
 
         //添加开启按钮
-        JButton buttonPowerON = new JButton("空调开机");
+        buttonPowerON = new JButton("空调开机");
         buttonPowerON.setFont(new Font("楷体", Font.PLAIN, 24));
         //添加动作监听器
         buttonPowerON.addActionListener(new ActionListener() {
@@ -41,8 +51,9 @@ public class MainUI extends JFrame {
         });
 
         //添加查看房间状态按钮
-        JButton buttonCheckRoomState = new JButton("查看房间状态");
+        buttonCheckRoomState = new JButton("查看房间状态");
         buttonCheckRoomState.setFont(new Font("楷体", Font.PLAIN, 24));
+        setButtonCheckRoomStateEnabled(false);
         //添加动作监听器
         buttonCheckRoomState.addActionListener(new ActionListener() {
             @Override
@@ -54,12 +65,13 @@ public class MainUI extends JFrame {
 
         //前台部分
         //添加标题
-        JLabel receptionLabel = new JLabel("前台", JLabel.CENTER);
+        receptionLabel = new JLabel("前台", JLabel.CENTER);
         receptionLabel.setFont(new Font("楷体", Font.PLAIN, 30));
 
         //添加创建账单按钮
-        JButton buttonCreateInvoice = new JButton("查看账单");
+        buttonCreateInvoice = new JButton("查看账单");
         buttonCreateInvoice.setFont(new Font("楷体", Font.PLAIN, 24));
+        setButtonCreateInvoiceEnabled(false);
         //buttonCreateRDR.addActionListener();//添加动作监听器
         buttonCreateInvoice.addActionListener(new ActionListener() {
 
@@ -81,8 +93,9 @@ public class MainUI extends JFrame {
 //        });
 
         //添加创建详单按钮
-        JButton buttonCreateRDR = new JButton("查看详单");
+        buttonCreateRDR = new JButton("查看详单");
         buttonCreateRDR.setFont(new Font("楷体", Font.PLAIN, 24));
+        setButtonCreateRDREnabled(false);
         buttonCreateRDR.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -107,12 +120,13 @@ public class MainUI extends JFrame {
 
         //经理部分
         //添加标题
-        JLabel managerLabel = new JLabel("经理", JLabel.CENTER);
+        managerLabel = new JLabel("经理", JLabel.CENTER);
         managerLabel.setFont(new Font("楷体", Font.PLAIN, 30));
 
         //添加查看报表按钮
-        JButton buttonQueryReport = new JButton("查看报表");
+        buttonQueryReport = new JButton("查看报表");
         buttonQueryReport.setFont(new Font("楷体", Font.PLAIN, 24));
+        setButtonQueryReportEnabled(false);
         buttonQueryReport.addActionListener(new ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
 //                mainUI.setEnabled(false);//设置本窗口不可选中
@@ -190,6 +204,22 @@ public class MainUI extends JFrame {
         s.gridheight = 4;
         centerPane.add(buttonQueryReport, s);
 
+    }
+
+    public void setButtonCheckRoomStateEnabled(boolean enable) {
+        this.buttonCheckRoomState.setEnabled(enable);
+    }
+
+    public void setButtonCreateInvoiceEnabled(boolean enable) {
+        this.buttonCreateInvoice.setEnabled(enable);
+    }
+
+    public void setButtonCreateRDREnabled(boolean enable) {
+        this.buttonCreateRDR.setEnabled(enable);
+    }
+
+    public void setButtonQueryReportEnabled(boolean enable) {
+        this.buttonQueryReport.setEnabled(enable);
     }
 
     public static void main(String[] args) {
