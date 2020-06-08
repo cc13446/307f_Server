@@ -5,34 +5,43 @@ import java.util.Date;
 
 public class DetailBill {
 
-    private int roomId;
-    private Date dateIn;
-    private Date dateOut;
+    private int customId;
+    private Date requestOnDate;
+    private Date requestOffDate;
     //private String information;
     private ArrayList<DetailBillItem> detailBillList;
 
-    public int getRoomId() {
-        return roomId;
+//    public int getRoomId() {
+//        return roomId;
+//    }
+//
+//    public void setRoomId(int roomId) {
+//        this.roomId = roomId;
+//    }
+
+
+    public int getCustomId() {
+        return customId;
     }
 
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
+    public void setCustomId(int customId) {
+        this.customId = customId;
     }
 
-    public Date getDateIn() {
-        return dateIn;
+    public Date getRequestOnDate() {
+        return requestOnDate;
     }
 
-    public void setDateIn(Date dateIn) {
-        this.dateIn = dateIn;
+    public void setRequestOnDate(Date requestOnDate) {
+        this.requestOnDate = requestOnDate;
     }
 
-    public Date getDateOut() {
-        return dateOut;
+    public Date getRequestOffDate() {
+        return requestOffDate;
     }
 
-    public void setDateOut(Date dateOut) {
-        this.dateOut = dateOut;
+    public void setRequestOffDate(Date requestOffDate) {
+        this.requestOffDate = requestOffDate;
     }
 
     public ArrayList<DetailBillItem> getDetailBillList() {

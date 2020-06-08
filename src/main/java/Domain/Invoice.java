@@ -4,25 +4,58 @@ import java.util.Date;
 
 public class Invoice {
 
-    private Date dateIn;
-    private Date dateOut;
+    private Date requestOnDate;
+    private Date requestOffDate;
     private double totalFee;
-    private int roomId;
+    private int customId;
 
-    public Date getDateIn() {
-        return dateIn;
+//    public Date getDateIn() {
+//        return dateIn;
+//    }
+//
+//    public void setDateIn(Date dateIn) {
+//        this.dateIn = dateIn;
+//    }
+//
+//    public Date getDateOut() {
+//        return dateOut;
+//    }
+//
+//    public void setDateOut(Date dateOut) {
+//        this.dateOut = dateOut;
+//    }
+//
+//    public double getTotalFee() {
+//        return totalFee;
+//    }
+//
+//    public void setTotalFee(double totalFee) {
+//        this.totalFee = totalFee;
+//    }
+//
+//    public int getRoomId() {
+//        return roomId;
+//    }
+//
+//    public void setRoomId(int roomId) {
+//        this.roomId = roomId;
+//    }
+
+
+    public Date getRequestOnDate() {
+        return requestOnDate;
     }
 
-    public void setDateIn(Date dateIn) {
-        this.dateIn = dateIn;
+    public void setRequestOnDate(Date requestOnDate) {
+        this.requestOnDate = requestOnDate;
     }
 
-    public Date getDateOut() {
-        return dateOut;
+    public Date getRequestOffDate() {
+        return requestOffDate;
     }
 
-    public void setDateOut(Date dateOut) {
-        this.dateOut = dateOut;
+    public void setRequestOffDate(Date requestOffDate) {
+        this.requestOffDate = requestOffDate;
     }
 
     public double getTotalFee() {
@@ -33,11 +66,11 @@ public class Invoice {
         this.totalFee = totalFee;
     }
 
-    public int getRoomId() {
-        return roomId;
+    public int getCustomId() {
+        return customId;
     }
 
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
+    public void setCustomId(int customId) {
+        this.customId = customId;
     }
 }
