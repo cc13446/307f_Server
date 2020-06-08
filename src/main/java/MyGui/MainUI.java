@@ -25,7 +25,6 @@ public class MainUI extends JFrame {
         setTitle("系统管理主界面");
         setBounds(610, 140, 600, 400);//设置窗口大小
         setLayout(new BorderLayout());
-//        setLayout(new GridBagLayout());
 
         //中间容器
         centerPane = new JPanel();
@@ -72,7 +71,6 @@ public class MainUI extends JFrame {
         buttonCreateInvoice = new JButton("查看账单");
         buttonCreateInvoice.setFont(new Font("楷体", Font.PLAIN, 24));
         setButtonCreateInvoiceEnabled(false);
-        //buttonCreateRDR.addActionListener();//添加动作监听器
         buttonCreateInvoice.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -80,7 +78,6 @@ public class MainUI extends JFrame {
                 createInvoiceGUI.setVisible(true);
             }
         });
-
 
         //添加创建详单按钮
         buttonCreateRDR = new JButton("查看详单");
@@ -91,10 +88,8 @@ public class MainUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 CreateDetailBillUI createDetailBillGUI=new CreateDetailBillUI();
                 createDetailBillGUI.setVisible(true);
-                //System.out.println("t");
             }
         });
-
 
         //经理部分
         //添加标题
@@ -107,7 +102,6 @@ public class MainUI extends JFrame {
         setButtonQueryReportEnabled(false);
         buttonQueryReport.addActionListener(new ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
-//                mainUI.setEnabled(false);//设置本窗口不可选中
                 QueryReportUI queryReport = new QueryReportUI();
                 queryReport.setVisible(true);
             }
@@ -158,13 +152,11 @@ public class MainUI extends JFrame {
         s.gridheight = 2;
         centerPane.add(buttonCreateInvoice, s);
 
-
         s.gridx = 1;
         s.gridy = 3;
         s.gridwidth = 1;
         s.gridheight = 2;
         centerPane.add(buttonCreateRDR, s);
-
 
         s.gridx = 2;
         s.gridy = 1;

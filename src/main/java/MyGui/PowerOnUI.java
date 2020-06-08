@@ -225,16 +225,16 @@ public class PowerOnUI extends JFrame {
             int state = temp.getInt("state");
             if (state == 0) {
                 System.out.println("发送空调默认参数成功");
+                ((MainUI) relativeWindow).setButtonCheckRoomStateEnabled(true);
+                ((MainUI) relativeWindow).setButtonCreateInvoiceEnabled(true);
+                ((MainUI) relativeWindow).setButtonCreateRDREnabled(true);
+                ((MainUI) relativeWindow).setButtonQueryReportEnabled(true);
             } else {
                 System.out.println("发送空调默认参数失败");
             }
         } else {
             JOptionPane.showMessageDialog(null, "发送请求失败");
         }
-        ((MainUI) relativeWindow).setButtonCheckRoomStateEnabled(true);
-        ((MainUI) relativeWindow).setButtonCreateInvoiceEnabled(true);
-        ((MainUI) relativeWindow).setButtonCreateRDREnabled(true);
-        ((MainUI) relativeWindow).setButtonQueryReportEnabled(true);
         dispose();
     }
 }
