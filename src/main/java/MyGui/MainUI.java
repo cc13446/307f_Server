@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 public class MainUI extends JFrame {
     //构造方法
     public MainUI() {
-        final JFrame mainUI = this;
+        final MainUI mainUI = this;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("系统管理主界面");
         setBounds(610, 140, 600, 400);//设置窗口大小

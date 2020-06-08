@@ -21,20 +21,12 @@ public class ViewReportUI extends JFrame {
         setResizable(false);
         setVisible(false);
 
-//        //本窗口关闭后，设置原窗口可选中
-//        addWindowListener(new WindowAdapter() {
-//            public void windowClosing(WindowEvent e) {
-//                //设置启用
-//                queryReportUI.setEnabled(true);
-//            }
-//        });
-
         columnName = new Vector();
         //设置列名
         columnName.add("房间号");
         columnName.add("空调开关次数");
         columnName.add("空调服务时长");
-        columnName.add("总费用");
+        columnName.add("总费用/元");
         columnName.add("被调度的次数");
         columnName.add("旅客人数");
         columnName.add("调温次数");
@@ -60,5 +52,6 @@ public class ViewReportUI extends JFrame {
         jt.setEnabled(false);
         jsp = new JScrollPane(jt);
         add(jsp);
+
     }
 }
