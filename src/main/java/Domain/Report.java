@@ -10,14 +10,6 @@ public class Report {
     private Date date = new Date();
     private ArrayList<ReportForm> reportFormList = new ArrayList<>();
 
-    @Override
-    public String toString() {
-        return "Report{" +
-                "typeReport=" + typeReport +
-                ", date=" + date +
-                ", reportFormList=" + reportFormList.toString() +
-                '}';
-    }
 
     //构造函数
     public Report() {
@@ -62,5 +54,13 @@ public class Report {
     //对列表的add方法
     public void addReportForm(ReportForm reportForm) {
         this.reportFormList.add(reportForm);
+    }
+    @Override
+    public String toString() {
+        return "Report{" +
+                "typeReport=" + typeReport +
+                ", date=" + date +
+                ", reportFormList=" + reportFormList.toString() +
+                '}';
     }
 }
