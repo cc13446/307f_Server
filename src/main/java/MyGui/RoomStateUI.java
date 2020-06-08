@@ -33,13 +33,13 @@ public class RoomStateUI extends JFrame {
         // 设置表头
         columnNames.add("房间号");
         columnNames.add("用户ID");
-        columnNames.add("房间状态");
-        columnNames.add("当前温度");
-        columnNames.add("目标温度");
+        columnNames.add("空调状态");
+        columnNames.add("当前温度/°C");
+        columnNames.add("目标温度/°C");
         columnNames.add("风速");
-        columnNames.add("当前费率");
-        columnNames.add("总费用");
-        columnNames.add("总服务时间");
+        columnNames.add("当前费率/元");
+        columnNames.add("总费用/元");
+        columnNames.add("总服务时间/秒");
 
         jp = new JPanel(new BorderLayout());
         jp.setSize(300,400);
@@ -105,10 +105,11 @@ public class RoomStateUI extends JFrame {
             room.add(state.toString());
             room.add(Double.toString(json.getDouble("currentTemp")));
             room.add(Double.toString(json.getDouble("targetTemp")));
-            room.add(Integer.toString(json.getInt("fanSpeed")));
+            FanSpeed speed = FanSpeed.values()[json.getInt("fanSpeed")];
+            room.add(speed.toString());
             room.add(Double.toString(json.getDouble("feeRate")));
             room.add(Double.toString(json.getDouble("fee")));
-            room.add(Long.toString(json.getLong("duration")));
+            room.add(Long.toString((json.getLong("duration")) / 1000));
             roomStateData.add(room.clone());
         }
         DefaultTableModel model = new DefaultTableModel(roomStateData, columnNames);

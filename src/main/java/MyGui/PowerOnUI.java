@@ -5,6 +5,7 @@ import Enum.*;
 import MyHttp.HttpRequestModel;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.log4j.chainsaw.Main;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -145,7 +146,7 @@ public class PowerOnUI extends JFrame {
                 System.out.println("空调初始化参数为：" + printMsg);
 
                 // 发送信息
-                sendPara();
+                sendPara(relativeWindow);
             }
         });
 
@@ -194,7 +195,7 @@ public class PowerOnUI extends JFrame {
     }
 
     // 发送从UI获得的空调初始化参数
-    public void sendPara() {
+    public void sendPara(JFrame relativeWindow) {
         System.out.println("准备发送空调默认参数");
 
         HttpRequestModel httpRequestModel = new HttpRequestModel();
@@ -230,6 +231,10 @@ public class PowerOnUI extends JFrame {
         } else {
             JOptionPane.showMessageDialog(null, "发送请求失败");
         }
+        ((MainUI) relativeWindow).setButtonCheckRoomStateEnabled(true);
+        ((MainUI) relativeWindow).setButtonCreateInvoiceEnabled(true);
+        ((MainUI) relativeWindow).setButtonCreateRDREnabled(true);
+        ((MainUI) relativeWindow).setButtonQueryReportEnabled(true);
         dispose();
     }
 }
