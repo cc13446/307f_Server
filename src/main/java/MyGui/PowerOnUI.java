@@ -29,7 +29,7 @@ public class PowerOnUI extends JFrame {
         setSize(250, 330);
         setResizable(false);
 
-        String[] modeList = new String[]{"制冷", "制热"};
+        String[] modeList = new String[]{"制热", "制冷"};
 
         // 创建本窗口所有基本组件
         JButton confirmMode = new JButton("确认空调模式");
