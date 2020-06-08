@@ -5,7 +5,6 @@ import App.PrintInvoice;
 import Domain.DetailBill;
 import Domain.DetailBillItem;
 import MyHttp.HttpRequestModel;
-import MyListener.CreateDetailBillListener;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.jdesktop.swingx.JXDatePicker;
@@ -42,7 +41,7 @@ public class CreateDetailBillUI extends JFrame{
     private JButton detailBillButton;
     private JButton printButton;
     private JTextField roomTextField;
-    private CreateDetailBillListener createDetailBillListener;
+
     private DetailBill detailBill;
     private int customId;
     private boolean result;
