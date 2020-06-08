@@ -29,7 +29,7 @@ public class MainUI extends JFrame {
         administratorLabel.setFont(new Font("楷体", Font.PLAIN, 30));
 
         //添加开启按钮
-        JButton buttonPowerON = new JButton("PowerON");
+        JButton buttonPowerON = new JButton("空调开机");
         buttonPowerON.setFont(new Font("楷体", Font.PLAIN, 24));
         //添加动作监听器
         buttonPowerON.addActionListener(new ActionListener() {

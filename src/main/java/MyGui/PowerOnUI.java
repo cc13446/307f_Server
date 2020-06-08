@@ -2,12 +2,16 @@ package MyGui;
 
 import javax.swing.*;
 import Enum.*;
+import MyHttp.HttpRequestModel;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
 
 public class PowerOnUI extends JFrame {
     private double feeRateHigh;
@@ -165,13 +169,13 @@ public class PowerOnUI extends JFrame {
         // 设置默认选中的条目
         modeComboBox.setSelectedIndex(0);
         // 设置默认参数
-        feeRateHigh = 1.5;
+        feeRateHigh = 1;
         feeRateMid = 0.5;
-        feeRateLow = 1.0;
-        mode = Mode.COLD;
-        tempHighLimit = 28;
+        feeRateLow = 0.33;
+        mode = Mode.HOT;
+        tempHighLimit = 25;
         tempLowLimit = 18;
-        defaultTargetTemp = 25;
+        defaultTargetTemp = 22;
         textTempHighLimit.setText(Double.toString(tempHighLimit));
         textTempLowLimit.setText(Double.toString(tempLowLimit));
         textDefaultTargetTemp.setText(Double.toString(defaultTargetTemp));
@@ -243,12 +247,12 @@ public class PowerOnUI extends JFrame {
                     confirmPara.setEnabled(false);
 
                     // 重新显示默认参数
-                    feeRateHigh = 1.5;
+                    feeRateHigh = 1;
                     feeRateMid = 0.5;
-                    feeRateLow = 1.0;
+                    feeRateLow = 0.33;
                     tempLowLimit = 18;
 
-                    if (modeComboBox.getSelectedIndex() == 0) {
+                    if (modeComboBox.getSelectedIndex() == 1) {
                         mode = Mode.COLD;
                         tempHighLimit = 28;
                         defaultTargetTemp = 25;
@@ -273,8 +277,41 @@ public class PowerOnUI extends JFrame {
 
     // 发送从UI获得的空调初始化参数
     public void sendPara() {
+        System.out.println("准备发送空调默认参数");
 
-        System.out.println("空调默认参数已发送");
+        HttpRequestModel httpRequestModel = new HttpRequestModel();
+        JSONObject json = new JSONObject();
+
+        //写json包
+        json.put("msgType", 0);
+        json.put("mode", mode);
+        json.put("tempHighLimit", tempHighLimit);
+        json.put("tempLowLimit", tempLowLimit);
+        json.put("defaultTargetTemp", defaultTargetTemp);
+        json.put("feeRateHigh", feeRateHigh);
+        json.put("feeRateMid", feeRateMid);
+        json.put("feeRateLow", feeRateLow);
+
+        //发送请求
+        JSONObject temp = null;
+        try {
+            temp = httpRequestModel.send(json);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        } catch (InterruptedException interruptedException) {
+            interruptedException.printStackTrace();
+        }
+
+        if (temp != null) {
+            int state = temp.getInt("state");
+            if (state == 0) {
+                System.out.println("发送空调默认参数成功");
+            } else {
+                System.out.println("发送空调默认参数失败");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "发送请求失败");
+        }
         dispose();
     }
 }

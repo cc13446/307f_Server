@@ -1,21 +1,31 @@
 package MyGui;
 
+import Domain.Report;
+import Domain.ReportForm;
+import MyHttp.HttpRequestModel;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class RoomStateUI extends JFrame {
     // 创建表头
-    private final Object[] columnNames = {"房间状态", "总费用", "当前温度", "目标温度", "当前费率", "总服务时间", "风速"};
+    private final Object[] columnNames = {"房间号", "用户ID", "房间状态", "当前温度", "目标温度", "风速", "当前费率", "总费用", "总服务时间"};
 
     // 获取表格数据
     private Object[][] roomState = {
-            {"11111", 1, 1, "", "", "", ""},
-            {"11111", 1, 1, 1, 1, 1, "LOW"},
-            {"11111", 1, 1, 1, 1, 1, "LOW"},
-            {"11111", 1, 1, 1, 1, 1, "LOW"},
-            {"11111", 1, 1, 1, 1, 1, "MID"}
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""}
     };
     JTable roomStateTable = null;
 
@@ -30,14 +40,35 @@ public class RoomStateUI extends JFrame {
         // 创建表格
         roomStateTable = new JTable(roomState, columnNames);
 
-        JButton flush = new JButton("刷新");
+        JButton flush = new JButton("刷新房间状态");
         flush.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // 刷新数据
                 System.out.println("点击刷新数据按钮");
 
-                roomStateTable = new JTable(roomState, columnNames);
+                /********************发送网络请求****************************/
+                HttpRequestModel httpRequestModel = new HttpRequestModel();
+                JSONObject json = new JSONObject();
+
+                //写json包
+                json.put("msgType", 1);
+
+                //发送请求
+                JSONArray temp = null;
+                try {
+                    temp = httpRequestModel.send1(json);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+
+                if (temp != null) {
+                    getRoomStateFromJson(temp, roomStateTable);
+                } else {
+                    JOptionPane.showMessageDialog(null, "发送请求失败");
+                }
             }
         });
 
@@ -49,5 +80,22 @@ public class RoomStateUI extends JFrame {
         setContentPane(jp);
         pack();
         setLocationRelativeTo(null);
+    }
+
+    private void getRoomStateFromJson(JSONArray list, JTable roomStateTable) {
+        int count = 0;
+        for (Object o : list) {
+            JSONObject json = (JSONObject) o;
+            roomStateTable.getModel().setValueAt(json.getInt("roomID"), count, 0);
+            roomStateTable.getModel().setValueAt(json.getInt("customerID"), count, 1);
+            roomStateTable.getModel().setValueAt(json.getInt("state"), count, 2);
+            roomStateTable.getModel().setValueAt(json.getDouble("currentTemp"), count, 3);
+            roomStateTable.getModel().setValueAt(json.getDouble("targetTemp"), count, 4);
+            roomStateTable.getModel().setValueAt(json.getInt("fanSpeed"), count, 5);
+            roomStateTable.getModel().setValueAt(json.getDouble("feeRate"), count, 6);
+            roomStateTable.getModel().setValueAt(json.getDouble("fee"), count, 7);
+            roomStateTable.getModel().setValueAt(json.getLong("duration"), count, 8);
+            count++;
+        }
     }
 }
