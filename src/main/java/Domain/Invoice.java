@@ -9,38 +9,6 @@ public class Invoice {
     private double totalFee;
     private int customId;
 
-//    public Date getDateIn() {
-//        return dateIn;
-//    }
-//
-//    public void setDateIn(Date dateIn) {
-//        this.dateIn = dateIn;
-//    }
-//
-//    public Date getDateOut() {
-//        return dateOut;
-//    }
-//
-//    public void setDateOut(Date dateOut) {
-//        this.dateOut = dateOut;
-//    }
-//
-//    public double getTotalFee() {
-//        return totalFee;
-//    }
-//
-//    public void setTotalFee(double totalFee) {
-//        this.totalFee = totalFee;
-//    }
-//
-//    public int getRoomId() {
-//        return roomId;
-//    }
-//
-//    public void setRoomId(int roomId) {
-//        this.roomId = roomId;
-//    }
-
 
     public Date getRequestOnDate() {
         return requestOnDate;
@@ -72,5 +40,15 @@ public class Invoice {
 
     public void setCustomId(int customId) {
         this.customId = customId;
+    }
+
+    @Override
+    public String toString() {
+        return "Invoice{" +
+                "requestOnDate=" + requestOnDate +
+                ", requestOffDate=" + requestOffDate +
+                ", totalFee=" + totalFee +
+                ", customId=" + customId +
+                '}';
     }
 }

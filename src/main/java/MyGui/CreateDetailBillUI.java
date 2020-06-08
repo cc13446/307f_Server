@@ -77,16 +77,6 @@ public class CreateDetailBillUI extends JFrame{
         columnName.add("费率");
         columnName.add("费用");
 
-//        rowData = new Vector();
-//
-//
-//        //初始化JTable
-//        jt = new JTable(rowData, columnName);
-//        jsp = new JScrollPane(jt);
-//        jsp.setBounds(5,105,440,255);
-//        add(jsp);
-
-
 
 
         //按钮
@@ -100,7 +90,7 @@ public class CreateDetailBillUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //获取详单信息
-                DetailBill detailBill=new DetailBill();
+                detailBill=new DetailBill();
 //        detailBill.setDateIn(dateInPick.getDate());
 //        detailBill.setDateOut(dateOutPick.getDate());
 //        detailBill.setRoomId(Integer.parseInt(roomTextField.getText()));
@@ -156,20 +146,19 @@ public class CreateDetailBillUI extends JFrame{
                  * ```
                  */
 
-                DetailBill detailBill1=new DetailBill();
                 ArrayList<DetailBillItem> detailBillItems=new ArrayList<>();
                 customId=msg.getInt("customId");
                 detailBill.setCustomId(customId);
 
                 try {
-                    detailBill.setRequestOnDate(new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss").parse(msg.getString("requestOnDate")));
-                    detailBill.setRequestOffDate(new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss").parse(msg.getString("requestOffDate")));
+                    detailBill.setRequestOnDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(msg.getString("requestOnDate")));
+                    detailBill.setRequestOffDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(msg.getString("requestOffDate")));
 
                 } catch (ParseException parseException) {
                     parseException.printStackTrace();
                 }
-                JSONArray data=new JSONArray();
-                data=msg.getJSONArray("data");
+
+                JSONArray data=msg.getJSONArray("data");
                 //DetailBillItem item=new DetailBillItem();
                 for (Object object:data){
                     JSONObject dataJson=(JSONObject)object;
@@ -192,13 +181,9 @@ public class CreateDetailBillUI extends JFrame{
                         item.setMode(Mode.FAN);
                     }
                     //fanspeed
-                    int fan=dataJson.getInt("fanSpeed");
-                    if (fan==0)
-                        item.setFanSpeed(FanSpeed.LOW);
-                    else if (fan==1)
-                        item.setFanSpeed(FanSpeed.MEDIUM);
-                    else if (fan==2)
-                        item.setFanSpeed(FanSpeed.HIGH);
+
+                    item.setFanSpeed(FanSpeed.values()[dataJson.getInt("fanSpeed")]);
+
 
                     //targetTemp
                     item.setTargetTemp(dataJson.getDouble("targetTemp"));

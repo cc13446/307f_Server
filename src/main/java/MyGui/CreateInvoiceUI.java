@@ -72,7 +72,10 @@ public class CreateInvoiceUI extends JFrame{
          * }
          */
 
-
+        JButton printButton = new JButton();
+        printButton.setText("打印账单");
+        printButton.setBounds(180,120,100,30);
+        printButton.setEnabled(false);
 
         //添加按钮
         JButton queryButton = new JButton();
@@ -98,26 +101,20 @@ public class CreateInvoiceUI extends JFrame{
                 jsonObject.put("msgType",2);
 
 
-                JSONObject msg=new JSONObject();
-                invoice.setCustomId(msg.getInt("customId"));
                 try {
-                    msg=httpRequestModel.send(jsonObject);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "发送请求失败");
-                } catch (InterruptedException interruptedException) {
-                    interruptedException.printStackTrace();
-                }
-
-                try {
+                    JSONObject msg=httpRequestModel.send(jsonObject);
+                    System.out.println(msg);
+                    invoice.setCustomId(msg.getInt("customId"));
                     invoice.setRequestOnDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(msg.getString("requestOnDate")));
                     invoice.setRequestOffDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(msg.getString("requestOffDate")));
-                } catch (ParseException parseException) {
-                    parseException.printStackTrace();
+                    invoice.setTotalFee(msg.getDouble("totalFee"));
+                    System.out.println(invoice);
+                    fee.setText(String.valueOf(invoice.getTotalFee()));
+                    printButton.setEnabled(true);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "发送请求失败");
                 }
-                invoice.setTotalFee(msg.getDouble("totalFee"));
-                invoiceText.setText(String.valueOf(invoice.getTotalFee()));
-
 
             }
         });
@@ -125,10 +122,7 @@ public class CreateInvoiceUI extends JFrame{
 
 
 
-        JButton printButton = new JButton();
-        printButton.setText("打印账单");
-        printButton.setBounds(180,120,100,30);
-        printButton.setEnabled(false);
+
         printButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
