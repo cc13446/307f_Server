@@ -69,16 +69,6 @@ public class MainUI extends JFrame {
             }
         });
 
-//        //添加打印账单按钮
-//        JButton buttonPrintInvoice = new JButton("打印账单");
-//        buttonPrintInvoice.setFont(new Font("楷体", Font.PLAIN, 24));
-//        buttonPrintInvoice.addActionListener(new ActionListener() {
-//
-//            public void actionPerformed(ActionEvent e) {
-//                PrintInvoiceUI printInvoiceUI=new PrintInvoiceUI();
-//                printInvoiceUI.setVisible(true);
-//            }
-//        });
 
         //添加创建详单按钮
         JButton buttonCreateRDR = new JButton("查看详单");

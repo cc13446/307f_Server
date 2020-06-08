@@ -77,9 +77,9 @@ public class CreateDetailBillUI extends JFrame{
         columnName.add("模式");
         columnName.add("风速");
         columnName.add("温度");
-        columnName.add("持续时长");
-        columnName.add("费率");
-        columnName.add("费用");
+        columnName.add("持续时长/秒");
+        columnName.add("费率/元");
+        columnName.add("费用/元");
 
         DefaultTableModel tableModel=new DefaultTableModel();
 
@@ -178,8 +178,10 @@ public class CreateDetailBillUI extends JFrame{
                     row.add(item.getMode());
                     row.add(item.getFanSpeed());
                     row.add(item.getTargetTemp());
+                    row.add(item.getDuration()/1000);
                     row.add(item.getFeeRate());
                     row.add(item.getFee());
+                    System.out.println(item.getFee());
                     //rowData.add(row);
                     tableModel.addRow(row);
                 }
@@ -196,6 +198,7 @@ public class CreateDetailBillUI extends JFrame{
 //        jt=new JTable(rowData,columnName);
 //        DefaultTableModel model = new DefaultTableModel(jt, columnName);
 //        jt.setModel(model);
+        tableModel.setColumnIdentifiers(columnName);
         jTable=new JTable(tableModel);
         jsp = new JScrollPane(jTable);
         jsp.setBounds(5,105,440,255);
