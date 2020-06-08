@@ -43,6 +43,7 @@ public class CreateDetailBillUI extends JFrame{
     private CreateDetailBillListener createDetailBillListener;
     private DetailBill detailBill;
     private int customId;
+    private boolean result;
 
     public CreateDetailBillUI() {
         setTitle("创建详单");
@@ -105,7 +106,14 @@ public class CreateDetailBillUI extends JFrame{
 //        detailBill.setRoomId(Integer.parseInt(roomTextField.getText()));
 
 
+                if (isNumeric(roomTextField.getText())==false){
+
+                    JOptionPane.showMessageDialog(null,"输入房间号不合法");
+
+                }
                 roomId=Integer.parseInt(roomTextField.getText());
+
+                System.out.println("房间号"+roomId);
                 HttpRequestModel httpRequestModel = new HttpRequestModel();
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("roomId",roomId);
@@ -119,6 +127,7 @@ public class CreateDetailBillUI extends JFrame{
 
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "发送请求失败");
                 } catch (InterruptedException interruptedException) {
                     interruptedException.printStackTrace();
                 }
@@ -151,7 +160,7 @@ public class CreateDetailBillUI extends JFrame{
                 ArrayList<DetailBillItem> detailBillItems=new ArrayList<>();
                 customId=msg.getInt("customId");
                 detailBill.setCustomId(customId);
-                //report1.setDate(new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss").parse(temp.getString("date")));
+
                 try {
                     detailBill.setRequestOnDate(new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss").parse(msg.getString("requestOnDate")));
                     detailBill.setRequestOffDate(new SimpleDateFormat(" yyyy-MM-dd HH:mm:ss").parse(msg.getString("requestOffDate")));
@@ -235,19 +244,45 @@ public class CreateDetailBillUI extends JFrame{
                 //prinrt
                 try {
                     PrintDetailBill print=new PrintDetailBill(customId,detailBill);
-                    print.printDetailBill();
+                    result=print.printDetailBill();
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
+                }
+                if (result){
+                    JOptionPane.showMessageDialog(null, "详单打印成功");
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "详单打印失败");
                 }
             }
         });
         add(printButton);
 
 
-        detailBill=new DetailBill();
-        createDetailBillListener=new CreateDetailBillListener(detailBill,this,roomTextField,detailBillButton);
-        detailBillButton.addActionListener(createDetailBillListener);
-        roomTextField.addActionListener(createDetailBillListener);
-        printButton.addActionListener(createDetailBillListener);
+
+//        detailBill=new DetailBill();
+//        createDetailBillListener=new CreateDetailBillListener(detailBill,this,roomTextField,detailBillButton);
+//        detailBillButton.addActionListener(createDetailBillListener);
+//        roomTextField.addActionListener(createDetailBillListener);
+//        printButton.addActionListener(createDetailBillListener);
     }
+
+    public static boolean isNumeric(String str) {
+
+        for (int i = 0; i < str.length(); i++) {
+
+            System.out.println(str.charAt(i));
+
+            if (!Character.isDigit(str.charAt(i))) {
+
+                return false;
+
+            }
+
+        }
+
+        return true;
+
+    }
+
 }

@@ -16,12 +16,14 @@ import java.util.Date;
 
 public class CreateInvoiceUI extends JFrame{
 
-    private int customId;
+    private int roomId;
     private Invoice invoice;
+    private boolean result;
+    private int customId;
 
     public CreateInvoiceUI(){
         setTitle("查看账单");
-        setBounds(610, 140, 370, 320);//设置窗口大小
+        setBounds(610, 140, 370, 290);//设置窗口大小
         setResizable(false);//设置窗口不能改变大小
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);//关闭窗口 dispose这个窗口
         setLayout(null);
@@ -81,16 +83,32 @@ public class CreateInvoiceUI extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 //查总费用
                 invoice=new Invoice();
-                customId=Integer.parseInt(roomTextField.getText());
+                roomId=Integer.parseInt(roomTextField.getText());
 
+                if (isNumeric(roomTextField.getText())==false){
+
+                    JOptionPane.showMessageDialog(null,"输入房间号不合法");
+
+                }
+
+                System.out.println("房间号"+roomId);
                 HttpRequestModel httpRequestModel = new HttpRequestModel();
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("customId",customId);
+                jsonObject.put("roomId",roomId);
                 jsonObject.put("msgType",2);
 
 
                 JSONObject msg=new JSONObject();
                 invoice.setCustomId(msg.getInt("customId"));
+                try {
+                    msg=httpRequestModel.send(jsonObject);
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "发送请求失败");
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
+
                 try {
                     invoice.setRequestOnDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(msg.getString("requestOnDate")));
                     invoice.setRequestOffDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(msg.getString("requestOffDate")));
@@ -99,6 +117,7 @@ public class CreateInvoiceUI extends JFrame{
                 }
                 invoice.setTotalFee(msg.getDouble("totalFee"));
                 invoiceText.setText(String.valueOf(invoice.getTotalFee()));
+
 
             }
         });
@@ -109,15 +128,23 @@ public class CreateInvoiceUI extends JFrame{
         JButton printButton = new JButton();
         printButton.setText("打印账单");
         printButton.setBounds(180,120,100,30);
+        printButton.setEnabled(false);
         printButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //print
                 PrintInvoice print=new PrintInvoice(customId,invoice);
                 try {
-                    print.printInvoice();
+                    result=print.printInvoice();
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
+                }
+
+                if (result){
+                    JOptionPane.showMessageDialog(null, "详单打印成功");
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "详单打印失败");
                 }
 
             }
@@ -126,6 +153,23 @@ public class CreateInvoiceUI extends JFrame{
 
 
 
+
+    }
+    public static boolean isNumeric(String str) {
+
+        for (int i = 0; i < str.length(); i++) {
+
+            System.out.println(str.charAt(i));
+
+            if (!Character.isDigit(str.charAt(i))) {
+
+                return false;
+
+            }
+
+        }
+
+        return true;
 
     }
 }

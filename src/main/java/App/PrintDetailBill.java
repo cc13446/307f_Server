@@ -18,7 +18,8 @@ public class PrintDetailBill {
     }
 
     public boolean printDetailBill() throws IOException {
-        File detailBillFile=new File("DetailBillFile.txt");
+        String filename="DetailBillFile"+customId+".txt";
+        File detailBillFile=new File(filename);
         //OutputStream outputStream=new FileOutputStream(detailBillFile);
         BufferedWriter writer = new BufferedWriter(new FileWriter("DetailBillFile.txt"));
         writer.write("顾客"+customId+'\n');
@@ -28,7 +29,9 @@ public class PrintDetailBill {
             //writer.write(detailBill.getDetailBillList().get(i).toString()+'\n');
             writer.write("服务开始时间："+detailBill.getDetailBillList().get(i).getStartTime().toString()+'\n');
             writer.write("服务结束："+detailBill.getDetailBillList().get(i).getEndTime()+'\n');
-            writer.write("服务持续时间："+detailBill.getDetailBillList().get(i).getDuration()+'\n');
+            long ms=detailBill.getDetailBillList().get(i).getDuration();
+            //writer.write("服务持续时间："+detailBill.getDetailBillList().get(i).getDuration()+'\n');
+            writer.write("服务持续时间："+ms/1000/60/60+"小时"+ms/1000/60%60+"分"+ms/1000%60+"秒"+'\n');
             writer.write("目标温度："+detailBill.getDetailBillList().get(i).getTargetTemp()+'\n');
             writer.write("风速："+detailBill.getDetailBillList().get(i).getFee()+'\n');
             writer.write("模式："+detailBill.getDetailBillList().get(i).getMode()+'\n');

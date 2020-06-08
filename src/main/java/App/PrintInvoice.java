@@ -16,7 +16,8 @@ public class PrintInvoice {
         this.invoice=invoice;
     }
     public boolean printInvoice() throws IOException {
-        File Invoice=new File("InvoiceFile.txt");
+        String filename="Invoice"+customId+".txt";
+        File Invoice=new File(filename);
         BufferedWriter writer = new BufferedWriter(new FileWriter("InvoiceFile.txt"));
         writer.write("顾客"+customId+'\n');
         writer.write(invoice.getRequestOnDate()+"-----"+invoice.getRequestOffDate()+'\n');
