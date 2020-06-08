@@ -7,6 +7,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,11 +22,7 @@ public class RoomStateUI extends JFrame {
 
     // 获取表格数据
     private Object[][] roomState = {
-            {"", "", "", "", "", "", "", "", ""},
-            {"", "", "", "", "", "", "", "", ""},
-            {"", "", "", "", "", "", "", "", ""},
-            {"", "", "", "", "", "", "", "", ""},
-            {"", "", "", "", "", "", "", "", ""}
+
     };
     JTable roomStateTable = null;
 
@@ -36,9 +33,10 @@ public class RoomStateUI extends JFrame {
         setSize(600, 400);
 
         JPanel jp = new JPanel(new BorderLayout());
-
+        DefaultTableModel model = new DefaultTableModel(roomState, columnNames);
         // 创建表格
-        roomStateTable = new JTable(roomState, columnNames);
+        roomStateTable = new JTable();
+        roomStateTable.setModel(model);
 
         JButton flush = new JButton("刷新房间状态");
         flush.addActionListener(new ActionListener() {
@@ -58,6 +56,7 @@ public class RoomStateUI extends JFrame {
                 JSONArray temp = null;
                 try {
                     temp = httpRequestModel.send1(json);
+                    System.out.println(temp);
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 } catch (InterruptedException interruptedException) {
@@ -86,6 +85,9 @@ public class RoomStateUI extends JFrame {
         int count = 0;
         for (Object o : list) {
             JSONObject json = (JSONObject) o;
+            System.out.println(o);
+            DefaultTableModel model = (DefaultTableModel) roomStateTable.getModel();
+            model.addRow(columnNames);
             roomStateTable.getModel().setValueAt(json.getInt("roomID"), count, 0);
             roomStateTable.getModel().setValueAt(json.getInt("customerID"), count, 1);
             roomStateTable.getModel().setValueAt(json.getInt("state"), count, 2);
