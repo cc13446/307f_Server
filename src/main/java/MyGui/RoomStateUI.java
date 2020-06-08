@@ -28,7 +28,7 @@ public class RoomStateUI extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(relativeWindow);
         setTitle("Room State");
-        setSize(600, 400);
+        setSize(700, 400);
 
         // 设置表头
         columnNames.add("房间号");
@@ -42,12 +42,16 @@ public class RoomStateUI extends JFrame {
         columnNames.add("总服务时间/秒");
 
         jp = new JPanel(new BorderLayout());
-        jp.setSize(300,400);
+        jp.setSize(700,400);
+
         // 创建表格
         roomStateTable = new JTable();
+        // 请求房间数据，会显示在表格中
         requestRoomState();
 
+        // 刷新房间状态按钮
         flush = new JButton("刷新房间状态");
+        // 点击按钮刷新数据
         flush.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -66,6 +70,7 @@ public class RoomStateUI extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    // 发送请求，获得服务器上的房间数据
     private void requestRoomState() {
         /********************发送网络请求****************************/
         HttpRequestModel httpRequestModel = new HttpRequestModel();
@@ -77,6 +82,7 @@ public class RoomStateUI extends JFrame {
         //发送请求
         JSONArray temp = null;
         try {
+            // temp是服务器返回的json包
             temp = httpRequestModel.send1(json);
             System.out.println(temp);
         } catch (IOException ioException) {
@@ -86,12 +92,14 @@ public class RoomStateUI extends JFrame {
         }
 
         if (temp != null) {
+            // 将json包中的内容解析到表格中
             getRoomStateFromJson(temp);
         } else {
             JOptionPane.showMessageDialog(null, "发送请求失败");
         }
     }
 
+    // 将json包中的内容解析到表格中
     private void getRoomStateFromJson(JSONArray list) {
         Vector roomStateData = new Vector();
         for (Object o : list) {

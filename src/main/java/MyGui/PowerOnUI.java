@@ -23,6 +23,24 @@ public class PowerOnUI extends JFrame {
     private double tempLowLimit;
     private double defaultTargetTemp;
 
+    private JButton confirmMode;
+    private JButton confirmPara;
+    private JComboBox<String> modeComboBox;
+    private JTextField textFeeRateHigh;
+    private JTextField textFeeRateMid;
+    private JTextField textFeeRateLow;
+    private JTextField textTempHighLimit;
+    private JTextField textTempLowLimit;
+    private JTextField textDefaultTargetTemp;
+    private JLabel labelMode;
+    private JLabel labelFeeRateHigh;
+    private JLabel labelFeeRateMid;
+    private JLabel labelFeeRateLow;
+    private JLabel labelTempHighLimit;
+    private JLabel labelTempLowLimit;
+    private JLabel labelDefaultTargetTemp;
+    private JPanel jp;
+
     public PowerOnUI(JFrame relativeWindow) {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(relativeWindow);
@@ -33,26 +51,26 @@ public class PowerOnUI extends JFrame {
         String[] modeList = new String[]{"制热", "制冷"};
 
         // 创建本窗口所有基本组件
-        JButton confirmMode = new JButton("确认空调模式");
-        JButton confirmPara = new JButton("确认空调初始化参数");
-        JComboBox<String> modeComboBox = new JComboBox<String>(modeList);
-        JTextField textFeeRateHigh = new JTextField(8);
-        JTextField textFeeRateMid = new JTextField(8);
-        JTextField textFeeRateLow = new JTextField(8);
-        JTextField textTempHighLimit = new JTextField(8);
-        JTextField textTempLowLimit = new JTextField(8);
-        JTextField textDefaultTargetTemp = new JTextField(8);
-        JLabel labelMode = new JLabel("空调模式");
-        JLabel labelFeeRateHigh = new JLabel("高风速费率");
-        JLabel labelFeeRateMid = new JLabel("中风速费率");
-        JLabel labelFeeRateLow = new JLabel("低风速费率");
-        JLabel labelTempHighLimit = new JLabel("最高温度");
-        JLabel labelTempLowLimit = new JLabel("最低温度");
-        JLabel labelDefaultTargetTemp = new JLabel("默认温度");
+        confirmMode = new JButton("确认空调模式");
+        confirmPara = new JButton("确认空调初始化参数");
+        modeComboBox = new JComboBox<String>(modeList);
+        textFeeRateHigh = new JTextField(8);
+        textFeeRateMid = new JTextField(8);
+        textFeeRateLow = new JTextField(8);
+        textTempHighLimit = new JTextField(8);
+        textTempLowLimit = new JTextField(8);
+        textDefaultTargetTemp = new JTextField(8);
+        labelMode = new JLabel("空调模式");
+        labelFeeRateHigh = new JLabel("高风速费率");
+        labelFeeRateMid = new JLabel("中风速费率");
+        labelFeeRateLow = new JLabel("低风速费率");
+        labelTempHighLimit = new JLabel("最高温度");
+        labelTempLowLimit = new JLabel("最低温度");
+        labelDefaultTargetTemp = new JLabel("默认温度");
 
 
         // 使用分组布局
-        JPanel jp = new JPanel();
+        jp = new JPanel();
         GroupLayout layout = new GroupLayout(jp);
         jp.setLayout(layout);
 
@@ -150,6 +168,7 @@ public class PowerOnUI extends JFrame {
             }
         });
 
+        // 空调工作模式改变
         modeComboBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -221,10 +240,12 @@ public class PowerOnUI extends JFrame {
             interruptedException.printStackTrace();
         }
 
+        // 解析返回的json数据包
         if (temp != null) {
             int state = temp.getInt("state");
             if (state == 0) {
                 System.out.println("发送空调默认参数成功");
+                // 允许点击MainUI中的其他按钮
                 ((MainUI) relativeWindow).setButtonCheckRoomStateEnabled(true);
                 ((MainUI) relativeWindow).setButtonCreateInvoiceEnabled(true);
                 ((MainUI) relativeWindow).setButtonCreateRDREnabled(true);
