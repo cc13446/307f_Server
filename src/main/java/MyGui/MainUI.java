@@ -1,11 +1,16 @@
 package MyGui;
 
 import Domain.PrintReport;
+import MyHttp.HttpRequestModel;
+import net.sf.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 public class MainUI extends JFrame {
     private JPanel centerPane;
@@ -183,7 +188,27 @@ public class MainUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        MainUI a = new MainUI();
-        a.setVisible(true);
+        MainUI mainUI = new MainUI();
+        mainUI.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("msgType", 5);
+                try {
+                    jsonObject = new HttpRequestModel().send(jsonObject);
+                    if(jsonObject.getInt("state") != 0){
+                        JOptionPane.showMessageDialog(mainUI, "关闭远程服务器失败", "警告", JOptionPane.ERROR_MESSAGE);
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(mainUI, "关闭远程服务器成功", "恭喜", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(mainUI, "关闭远程服务器失败", "警告", JOptionPane.ERROR_MESSAGE);
+                }
+                System.exit(0);
+            }
+        });
+        mainUI.setVisible(true);
     }
 }
