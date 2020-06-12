@@ -25,22 +25,41 @@ import java.util.Date;
 import Enum.*;
 import org.apache.commons.lang.StringUtils;
 
+/*
+ *  打印报表的UI界面
+ */
+
 public class QueryReportUI extends JFrame {
-    private ArrayList<Integer> roomList = new ArrayList<>();//房间列表
-    private Report report = null;//请求得到的报表
-    private JLabel roomID;//房间号标签
-    private JTextField roomTextField;//房间号输入框
-    private JButton addButton;//添加房间按钮
-    private JLabel reportDate;//报表日期标签
-    private final JXDatePicker datePick;//date选择器
-    private JLabel reportTypeLabel;//报表类型标签
-    private JComboBox<String> typeReportJBox;//报表类型
-    private JLabel roomListLabel;//房间列表标签
-    private JTextArea roomListTextArea;//显示选择的房间
-    private JScrollPane scrollRoom;//滚动条
-    private JButton clearRoomListButton;//添加清空房间列表按钮
-    private JButton queryButton;//添加查询报表按钮
-    private JButton buttonPrintReport;//添加打印报表按钮
+    //房间列表
+    private ArrayList<Integer> roomList = new ArrayList<>();
+    //请求得到的报表
+    private Report report = null;
+    //房间号标签
+    private JLabel roomID;
+    //房间号输入框
+    private JTextField roomTextField;
+    //添加房间按钮
+    private JButton addButton;
+    //报表日期标签
+    private JLabel reportDate;
+    //date选择器
+    private final JXDatePicker datePick;
+    //报表类型标签
+    private JLabel reportTypeLabel;
+    //报表类型
+    private JComboBox<String> typeReportJBox;
+    //房间列表标签
+    private JLabel roomListLabel;
+    //显示选择的房间
+    private JTextArea roomListTextArea;
+    //滚动条
+    private JScrollPane scrollRoom;
+    //添加清空房间列表按钮
+    private JButton clearRoomListButton;
+    //添加查询报表按钮
+    private JButton queryButton;
+    //添加打印报表按钮
+    private JButton buttonPrintReport;
 
 
     //构造方法
@@ -223,10 +242,12 @@ public class QueryReportUI extends JFrame {
         add(buttonPrintReport);
     }
 
-
+    //从返回的Json包中解析出Report实例并返回
     public Report getReportFromJson(JSONArray list, Date date, int reportType) {
-        Report report1 = new Report();
-        TypeReport typeReport = TypeReport.DAILY;//报表类型
+        Report reportResult = new Report();
+
+        //报表类型
+        TypeReport typeReport = TypeReport.DAILY;
         if (reportType == 0)
             typeReport = TypeReport.DAILY;
         if (reportType == 1)
@@ -235,10 +256,12 @@ public class QueryReportUI extends JFrame {
             typeReport = TypeReport.MONTHLY;
         if (reportType == 3)
             typeReport = TypeReport.ANNUAL;
-        report1.setTypeReport(typeReport);
+        reportResult.setTypeReport(typeReport);
 
-        report1.setDate(date);
+        //设置日期
+        reportResult.setDate(date);
 
+        //设置ReportForm列表，解析ReportForm里面的各个属性，加入列表
         for (Object o : list) {
             JSONObject json = (JSONObject) o;
             ReportForm reportForm = new ReportForm(json.getInt("turnTimes"),
@@ -249,8 +272,8 @@ public class QueryReportUI extends JFrame {
                     json.getInt("changeTempTimes"),
                     json.getInt("changeFanSpeedTimes"),
                     json.getInt("roomId"));
-            report1.addReportForm(reportForm);
+            reportResult.addReportForm(reportForm);
         }
-        return report1;
+        return reportResult;
     }
 }
