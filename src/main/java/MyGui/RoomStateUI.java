@@ -11,18 +11,21 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
-public class RoomStateUI extends JFrame {
+public class RoomStateUI extends JFrame implements Runnable {
     // 创建表头
     private final Vector<String> columnNames = new Vector<String>();
     private JPanel jp;
     private JTable roomStateTable;
     private JButton flush;
+    private boolean keepRequest = true;
 
     public RoomStateUI(JFrame relativeWindow) {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -61,6 +64,13 @@ public class RoomStateUI extends JFrame {
             }
         });
 
+        this.addWindowListener(new WindowAdapter(){
+            public void windowClosing(WindowEvent e){
+                keepRequest = false;
+                super.windowClosing(e);
+            }
+        });
+
         // 表格的显示
         jp.add(roomStateTable.getTableHeader(), BorderLayout.NORTH);
         jp.add(roomStateTable, BorderLayout.CENTER);
@@ -68,6 +78,19 @@ public class RoomStateUI extends JFrame {
 
         setContentPane(jp);
         setLocationRelativeTo(null);
+    }
+
+    @Override
+    public void run() {
+        while(keepRequest) {
+            System.out.println("查询房间状态");
+            requestRoomState();
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     // 发送请求，获得服务器上的房间数据

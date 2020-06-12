@@ -59,6 +59,7 @@ public class MainUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 RoomStateUI roomStateWin = new RoomStateUI(mainUI);
                 roomStateWin.setVisible(true);
+                new Thread(roomStateWin).start();
             }
         });
 
