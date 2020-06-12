@@ -31,27 +31,39 @@ import Enum.FanSpeed;
 
 
 public class CreateDetailBillUI extends JFrame{
-    private Date dateIn;
-    private Date dateOut;
+    //房间号
     private int roomId;
-    private Vector rowData;
-    private final Vector columnName;
-    private JTable jt = null;
-    private JScrollPane jsp = null;
-    private JButton detailBillButton;
-    private JButton printButton;
-    private JTextField roomTextField;
-
+    //详单
     private DetailBill detailBill;
+    //顾客id
     private int customId;
+    //打印是否成功结果
     private boolean result;
+    //列名
+    private final Vector columnName;
+    //滚动条
+    private JScrollPane jsp ;
+    //查看详单按钮
+    private JButton detailBillButton;
+    //打印详单按钮
+    private JButton printButton;
+    //房间号输入框
+    private JTextField roomTextField;
+    //详单表格
     private JTable jTable;
+    //房间号标签
     private JLabel roomID;
+    //开始使用时间标签
     private JLabel requestOnLabel;
+    //开始使用时间显示框
     private JTextArea requestOnTextField;
+    //结束使用时间标签
     private JLabel requestOffLabel;
+    //结束使用时间显示框
     private JTextArea requestOffTextField;
+    //表格模型
     private DefaultTableModel tableModel;
+
 
     public CreateDetailBillUI() {
         setTitle("创建详单");
@@ -60,33 +72,43 @@ public class CreateDetailBillUI extends JFrame{
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);//关闭窗口 dispose这个窗口
         setLayout(null);
 
-        //房间号标签
+        //创建窗口所有控件
         roomID = new JLabel("输入房间号:",JLabel.CENTER);
+        roomTextField = new JTextField();
+        requestOnLabel = new JLabel("空调开始使用时间:",JLabel.CENTER);
+        requestOnTextField = new JTextArea();
+        requestOffLabel = new JLabel("空调结束使用时间:",JLabel.CENTER);
+        requestOffTextField = new JTextArea();
+        columnName = new Vector();
+        tableModel=new DefaultTableModel();
+        detailBillButton = new JButton();
+        printButton=new JButton();
+
+        //房间号标签
         roomID.setBounds(280,5,100,25);
         add(roomID);
 
         //房间号输入框
-        roomTextField = new JTextField();
         roomTextField.setBounds(420,5,100,25);
         add(roomTextField);
 
-        requestOnLabel = new JLabel("空调开始使用时间:",JLabel.CENTER);
+        //开始使用时间标签
         requestOnLabel.setBounds(280,40,100,25);
         add(requestOnLabel);
 
-        requestOnTextField = new JTextArea();
+        //开始使用时间文本框
         requestOnTextField.setBounds(420,40,150,25);
         add(requestOnTextField);
 
-        requestOffLabel = new JLabel("空调结束使用时间:",JLabel.CENTER);
+        //结束使用时间标签
         requestOffLabel.setBounds(280,75,100,25);
         add(requestOffLabel);
 
-        requestOffTextField = new JTextArea();
+        //结束使用时间文本框
         requestOffTextField.setBounds(420,75,150,25);
         add(requestOffTextField);
 
-        columnName = new Vector();
+        //列名
         columnName.add("开始时间");
         columnName.add("结束时间");
         columnName.add("模式");
@@ -96,20 +118,21 @@ public class CreateDetailBillUI extends JFrame{
         columnName.add("费率");
         columnName.add("费用");
 
-        tableModel=new DefaultTableModel();
+        //设置列名
         tableModel.setColumnIdentifiers(columnName);
 
-        detailBillButton = new JButton();
+        //查看详单按钮
         detailBillButton.setText("查看详单");
         detailBillButton.setBounds(280,120,100,30);
         add(detailBillButton);
 
-        printButton=new JButton();
+        //打印详单按钮
         printButton.setText("打印详单");
         printButton.setBounds(420,120,100,30);
         add(printButton);
         printButton.setEnabled(false);
 
+        //点击查看详单按钮的监听
         detailBillButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -132,7 +155,6 @@ public class CreateDetailBillUI extends JFrame{
 
                 try {
                     msg=httpRequestModel.send(jsonObject);
-
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                     JOptionPane.showMessageDialog(null, "发送请求失败");
@@ -147,13 +169,15 @@ public class CreateDetailBillUI extends JFrame{
                 try {
                     detailBill.setRequestOnDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(msg.getString("requestOnDate")));
                     detailBill.setRequestOffDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(msg.getString("requestOffDate")));
-
                 } catch (ParseException parseException) {
                     parseException.printStackTrace();
                 }
+                //文本框显示开始/结束使用的时间
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 requestOnTextField.setText(df.format(detailBill.getRequestOnDate()));
                 requestOffTextField.setText(df.format(detailBill.getRequestOffDate()));
+
+                //获取json数组
                 JSONArray data=msg.getJSONArray("data");
                 for (Object object:data){
                     JSONObject dataJson=(JSONObject)object;
@@ -165,8 +189,6 @@ public class CreateDetailBillUI extends JFrame{
                     } catch (ParseException parseException) {
                         parseException.printStackTrace();
                     }
-
-
                     item.setMode(Mode.values()[dataJson.getInt("mode")]);
                     item.setFanSpeed(FanSpeed.values()[dataJson.getInt("fanSpeed")]);
                     item.setTargetTemp(dataJson.getDouble("targetTemp"));
@@ -178,6 +200,7 @@ public class CreateDetailBillUI extends JFrame{
                 }
                 detailBill.setDetailBillList(detailBillItems);
                 df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                //添加各行数据
                 for (DetailBillItem item:detailBill.getDetailBillList()){
                     Vector row = new Vector();
                     row.add(df.format(item.getStartTime()));
@@ -197,16 +220,17 @@ public class CreateDetailBillUI extends JFrame{
         });
 
 
+        //创建表格
         jTable=new JTable(tableModel);
         jsp = new JScrollPane(jTable);
         jsp.setBounds(5,160,780,255);
         add(jsp);
 
-
+        //点击打印详单按钮的监听
         printButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //prinrt
+                //打印详单
                 try {
                     PrintDetailBill print=new PrintDetailBill(customId,detailBill);
                     result=print.printDetailBill();
@@ -222,10 +246,9 @@ public class CreateDetailBillUI extends JFrame{
             }
         });
 
-
-
     }
 
+    //判断输入房间号是否全部为数字（是否合法）
     public static boolean isNumeric(String str) {
         for (int i = 0; i < str.length(); i++) {
             System.out.println(str.charAt(i));

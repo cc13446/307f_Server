@@ -7,18 +7,23 @@ import Enum.FanSpeed;
 import Enum.ScheduleType;
 
 public class DetailBillItem {
-
+    //服务开始时间
     private Date startTime;
+    //服务结束时间
     private Date endTime;
+    //目标温度
     private double targetTemp;
-    //private Date currentTime;
-    //private Date requestTime;
+    //费用
     private double fee;
+    //费率
     private double feeRate;
-    //private long Time;
+    //服务持续时间
     private long duration;
+    //风速
     private FanSpeed fanSpeed;
+    //模式
     private Mode mode;
+    //调度类型
     private ScheduleType scheduleType;
 
     public Date getStartTime() {

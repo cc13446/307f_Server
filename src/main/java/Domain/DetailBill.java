@@ -4,20 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class DetailBill {
-
+    //顾客Id
     private int customId;
+    //空调开始使用时间
     private Date requestOnDate;
+    //空调结束使用时间
     private Date requestOffDate;
-    //private String information;
+    //详单列表
     private ArrayList<DetailBillItem> detailBillList;
-
-//    public int getRoomId() {
-//        return roomId;
-//    }
-//
-//    public void setRoomId(int roomId) {
-//        this.roomId = roomId;
-//    }
 
 
     public int getCustomId() {
