@@ -20,7 +20,7 @@ public class ViewReportUI extends JFrame {
 
 
     //构造方法
-    public ViewReportUI(ArrayList<ReportForm> reportFormList){
+    public ViewReportUI(ArrayList<ReportForm> reportFormList) {
         setTitle("报表");
         setSize(800, 300);
         setLocation(610, 200);
@@ -41,7 +41,7 @@ public class ViewReportUI extends JFrame {
 
         rowData = new Vector();
         //rowData可存放多行，每行显示一个房间的ReportForm里面存储的各项数据
-        for (ReportForm reportForm:reportFormList){
+        for (ReportForm reportForm : reportFormList) {
             Vector line = new Vector();
             line.add(reportForm.getRoomId());
             line.add(reportForm.getTurnTimes());

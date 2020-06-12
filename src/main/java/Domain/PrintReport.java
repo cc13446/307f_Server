@@ -4,13 +4,21 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import jxl.*;
 import jxl.write.*;
 import jxl.write.biff.RowsExceededException;
 import Enum.*;
 
+/*
+ *  报表打印类，完成对报表的打印，将报表输出到Excel文件中保存
+ */
+
 public class PrintReport {
+    //报表对象
     private Report report = new Report();
+
+
     //构造方法
     public PrintReport(Report report) {
         this.report = report;
