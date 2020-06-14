@@ -14,6 +14,11 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
 
+/**
+ * 空调开机界面：用于设置空调默认工作状态和初始化参数，并开机
+ * 最后修改时间：2020/6/9 1:21
+ */
+
 public class PowerOnUI extends JFrame {
     private double feeRateHigh;
     private double feeRateMid;

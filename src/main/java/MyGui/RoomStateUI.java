@@ -19,12 +19,21 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
+/**
+ * 查看房间状态的UI界面：用于显示所有房间状态，和提供刷新房间状态的按钮
+ * 最后修改时间：2020/6/12 19：22
+ */
+
 public class RoomStateUI extends JFrame implements Runnable {
     // 创建表头
     private final Vector<String> columnNames = new Vector<String>();
+    // 中间容器
     private JPanel jp;
+    // 表格部件
     private JTable roomStateTable;
+    // 刷新表格状态的按钮
     private JButton flush;
+    // 持续向服务器请求房间状态，直到窗口关闭
     private boolean keepRequest = true;
 
     public RoomStateUI(JFrame relativeWindow) {
