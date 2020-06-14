@@ -1,6 +1,5 @@
 package MyGui;
 
-import Domain.PrintReport;
 import MyHttp.HttpRequestModel;
 import net.sf.json.JSONObject;
 
@@ -10,18 +9,31 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
+
+/*
+ *  主界面UI
+ */
 
 public class MainUI extends JFrame {
+    //界面中间容器
     private JPanel centerPane;
+    //管理员标签
     private JLabel administratorLabel;
+    //空调开机按钮
     private JButton buttonPowerON;
+    //查看房间状态按钮
     private JButton buttonCheckRoomState;
+    //前台标签
     private JLabel receptionLabel;
+    //查看账单按钮
     private JButton buttonCreateInvoice;
+    //查看详单按钮
     private JButton buttonCreateRDR;
+    //经理标签
     private JLabel managerLabel;
+    //查询报表按钮
     private JButton buttonQueryReport;
+
 
     //构造方法
     public MainUI() {
@@ -172,24 +184,30 @@ public class MainUI extends JFrame {
 
     }
 
+    //设置检查房间状态按钮无法选择
     public void setButtonCheckRoomStateEnabled(boolean enable) {
         this.buttonCheckRoomState.setEnabled(enable);
     }
 
+    //设置创建账单按钮无法选择
     public void setButtonCreateInvoiceEnabled(boolean enable) {
         this.buttonCreateInvoice.setEnabled(enable);
     }
 
+    //设置创建详单按钮无法选择
     public void setButtonCreateRDREnabled(boolean enable) {
         this.buttonCreateRDR.setEnabled(enable);
     }
 
+    //设置查看报表按钮无法选择
     public void setButtonQueryReportEnabled(boolean enable) {
         this.buttonQueryReport.setEnabled(enable);
     }
 
     public static void main(String[] args) {
         MainUI mainUI = new MainUI();
+
+        //关闭界面时发送消息让服务器关机
         mainUI.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {

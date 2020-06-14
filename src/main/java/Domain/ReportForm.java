@@ -1,15 +1,29 @@
 package Domain;
 
-public class ReportForm {
-    private int turnTimes;//空调开关次数
-    private long useTime;//空调服务时长
-    private double totalFee;//总费用
-    private int schedulerTimes;//被调度的次数
-    private int customerNumber;//旅客人数
-    private int changeTempTimes;//调温次数
-    private int changeFanSpeedTimes;//调风次数
-    private int roomId;//房间号
+/*
+ *  报表信息类，存储各个房间具体的报表信息
+ */
 
+public class ReportForm {
+    //空调开关次数
+    private int turnTimes;
+    //空调服务时长
+    private long useTime;
+    //总费用
+    private double totalFee;
+    //被调度的次数
+    private int schedulerTimes;
+    //旅客人数
+    private int customerNumber;
+    //调温次数
+    private int changeTempTimes;
+    //调风次数
+    private int changeFanSpeedTimes;
+    //房间号
+    private int roomId;
+
+
+    //构造方法
     public ReportForm(int turnTimes, long useTime, double totalFee, int schedulerTimes, int customerNumber, int changeTempTimes, int changeFanSpeedTimes, int roomId) {
         this.turnTimes = turnTimes;
         this.useTime = useTime;

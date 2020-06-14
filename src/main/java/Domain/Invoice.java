@@ -3,10 +3,13 @@ package Domain;
 import java.util.Date;
 
 public class Invoice {
-
+    //空调开始使用时间
     private Date requestOnDate;
+    //空调结束使用时间
     private Date requestOffDate;
+    //总费用
     private double totalFee;
+    //顾客Id
     private int customId;
 
 

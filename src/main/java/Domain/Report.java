@@ -5,9 +5,16 @@ import Enum.*;
 import java.util.ArrayList;
 import java.util.Date;
 
+/*
+ *  报表类，存储各个房间的报表列表和其他报表信息
+ */
+
 public class Report {
+    //报表类型
     private TypeReport typeReport;
+    //报表日期
     private Date date = new Date();
+    //报表属性列表
     private ArrayList<ReportForm> reportFormList = new ArrayList<>();
 
 
@@ -55,6 +62,7 @@ public class Report {
     public void addReportForm(ReportForm reportForm) {
         this.reportFormList.add(reportForm);
     }
+
     @Override
     public String toString() {
         return "Report{" +
