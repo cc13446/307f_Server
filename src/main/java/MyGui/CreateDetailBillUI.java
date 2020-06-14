@@ -198,6 +198,9 @@ public class CreateDetailBillUI extends JFrame{
                     detailBillItems.add(item);
 
                 }
+                tableModel=new DefaultTableModel();
+                tableModel.setColumnIdentifiers(columnName);
+                jTable.setModel(tableModel);
                 detailBill.setDetailBillList(detailBillItems);
                 df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 //添加各行数据
